@@ -1,0 +1,47 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+  @font-face { font-family: "Bricolage"; src: url("../../app/src/fonts/bricolage-grotesque.woff2") format("woff2"); font-weight: 200 800; }
+  @font-face { font-family: "Instrument"; src: url("../../app/src/fonts/instrument-sans.woff2") format("woff2"); font-weight: 400 700; }
+  html, body { margin: 0; width: 590px; height: 300px; overflow: hidden; }
+  body {
+    position: relative; font-family: "Instrument", sans-serif; color: #fff;
+    background-color: #9a3412;
+    background-image:
+      radial-gradient(340px 240px at 100% 0%, rgba(251, 191, 36, .36), transparent 65%),
+      radial-gradient(320px 260px at 0% 100%, rgba(234, 88, 12, .6), transparent 65%),
+      linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px),
+      linear-gradient(135deg, #c2410c, #7c2d12);
+    background-size: auto, auto, 18px 18px, 18px 18px, auto;
+  }
+  .left { position: absolute; left: 26px; top: 26px; width: 240px; }
+  .brand { display: flex; align-items: center; gap: 9px; font-family: "Bricolage"; font-weight: 800; font-size: 25px; letter-spacing: -.02em; }
+  .brand svg { width: 34px; height: 34px; filter: drop-shadow(0 4px 10px rgba(0,0,0,.25)); }
+  h1 { font-family: "Bricolage"; font-size: 25.5px; line-height: 1.06; margin: 16px 0 9px; letter-spacing: -.02em; font-weight: 800; }
+  h1 em { font-style: normal; color: #fbbf24; }
+  p { margin: 0; font-size: 11.5px; line-height: 1.45; color: rgba(255,255,255,.9); }
+  .chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 12px; }
+  .chips span { font-size: 9.5px; font-weight: 600; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.26); padding: 2px 7px; border-radius: 999px; white-space: nowrap; }
+  .stack { position: absolute; left: 280px; top: 30px; width: 300px; height: 260px; }
+  .desktop { position: absolute; left: 0; top: 0; width: 300px; border-radius: 8px; overflow: hidden; box-shadow: 0 16px 36px rgba(60, 14, 2, .5); background: #fff; }
+  .desktop .bar { height: 12px; background: #f3eee9; display: flex; gap: 3.5px; align-items: center; padding-left: 6px; }
+  .desktop .bar i { width: 4.5px; height: 4.5px; border-radius: 50%; background: #d8cfc7; }
+  .desktop .shot { display: block; width: 100%; }
+  .phone { position: absolute; left: 206px; top: 66px; width: 86px; height: 184px; border-radius: 15px; overflow: hidden; border: 3.5px solid #1c1917; background: #fff; box-shadow: 0 14px 30px rgba(60, 14, 2, .55); }
+  .phone img { display: block; width: 100%; }
+</style></head>
+<body>
+  <div class="left">
+    <div class="brand">
+      <svg viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#fff"/><rect x="7" y="17" width="4" height="8" rx="1.5" fill="#c2410c" opacity=".75"/><rect x="14" y="12" width="4" height="13" rx="1.5" fill="#c2410c" opacity=".9"/><rect x="21" y="8" width="4" height="17" rx="1.5" fill="#c2410c"/><circle cx="25.5" cy="6.5" r="3.2" fill="#fbbf24" stroke="#fff" stroke-width="1.5"/></svg>
+      Pulsezen
+    </div>
+    <h1>Privacy-friendly website analytics <em>SaaS</em></h1>
+    <p>Cookieless tracking, realtime dashboards, AI traffic, goals and revenue, reports and alerts. Sell plans with a full admin panel.</p>
+    <div class="chips"><span>Next.js 16</span><span>React 19</span><span>MySQL / SQLite</span><span>&lt; 2 KB script</span><span>Stripe · PayPal · Razorpay</span><span>RTL</span></div>
+  </div>
+  <div class="stack">
+    <div class="desktop"><div class="bar"><i></i><i></i><i></i></div><img class="shot" src="../raw/d01-dashboard.png"></div>
+    <div class="phone"><img src="../raw/m1-dashboard.png"></div>
+  </div>
+</body></html>

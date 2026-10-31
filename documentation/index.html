@@ -1,0 +1,1542 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pulsezen Documentation – Privacy-friendly Website Analytics SaaS (Next.js)</title>
+<style>
+  :root { --primary:#c2410c; --primary-soft:#fdeee6; --ink:#1a1714; --muted:#5f5a55; --line:#e6e0da; --paper:#faf8f6; --surface:#fff; --marker:#16a34a; }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+  body { margin:0; font: 16px/1.65 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color:var(--ink); background:var(--paper); }
+  a { color:var(--primary); }
+  code, pre, kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .9em; }
+  code { background:var(--primary-soft); padding:.1em .35em; border-radius:4px; overflow-wrap:anywhere; }
+  pre { background:#1d1916; color:#f3ece6; padding:16px; border-radius:10px; overflow-x:auto; line-height:1.5; }
+  pre code { background:none; padding:0; color:inherit; overflow-wrap:normal; }
+  .layout { display:grid; grid-template-columns: 270px 1fr; min-height:100vh; }
+  nav.toc { position:sticky; top:0; height:100vh; overflow-y:auto; background:var(--surface); border-right:1px solid var(--line); padding:24px 18px; }
+  nav.toc .brand { display:flex; align-items:center; gap:10px; font-weight:800; font-size:20px; margin-bottom:6px; }
+  nav.toc .brand span.mark { width:30px; height:30px; border-radius:9px; background:var(--primary); position:relative; display:inline-block; }
+  nav.toc .brand span.mark::after { content:""; position:absolute; left:6px; right:6px; top:14px; height:3px; border-radius:2px; background:#fff; box-shadow: 0 -5px 0 -1px rgba(255,255,255,.7); }
+  nav.toc .version { color:var(--muted); font-size:13px; margin:0 0 18px; }
+  nav.toc ol { list-style:none; margin:0; padding:0; }
+  nav.toc li a { display:block; padding:5px 10px; border-radius:6px; color:var(--ink); text-decoration:none; font-size:14px; }
+  nav.toc li a:hover { background:var(--primary-soft); }
+  nav.toc li.sub a { padding-left:24px; color:var(--muted); font-size:13px; }
+  main { padding:40px 56px 80px; max-width:1000px; min-width:0; }
+  h1 { font-size:40px; line-height:1.15; margin:0 0 12px; letter-spacing:-.02em; }
+  h2 { font-size:28px; margin:56px 0 12px; padding-top:8px; border-top:1px solid var(--line); letter-spacing:-.01em; }
+  h3 { font-size:20px; margin:32px 0 8px; }
+  h4 { font-size:17px; margin:22px 0 6px; }
+  p, li { max-width:78ch; }
+  .lead { font-size:19px; color:var(--muted); }
+  .card { background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:18px 22px; margin:18px 0; }
+  .note { border-left:4px solid var(--primary); background:var(--primary-soft); padding:12px 16px; border-radius:6px; margin:16px 0; }
+  .warn { border-left:4px solid #c98a00; background:#fbf3dc; padding:12px 16px; border-radius:6px; margin:16px 0; }
+  .note p, .warn p { margin:.3em 0; }
+  table { border-collapse:collapse; width:100%; margin:14px 0; background:var(--surface); font-size:15px; }
+  th, td { border:1px solid var(--line); padding:8px 12px; text-align:left; vertical-align:top; }
+  th { background:#f4eee9; }
+  td code { white-space:nowrap; }
+  td.wrap code { white-space:normal; }
+  ol.steps > li { margin-bottom:10px; }
+  .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap:12px; }
+  .grid .card { margin:0; }
+  .tag { display:inline-block; background:var(--marker); color:#fff; font-size:12px; font-weight:700; padding:1px 7px; border-radius:5px; vertical-align:middle; }
+  .box { border:1px solid var(--line); border-radius:12px; background:var(--surface); padding:4px 22px 14px; margin:18px 0; }
+  .box h4 { margin-top:16px; }
+  .muted { color:var(--muted); }
+  @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } nav.toc { position:static; height:auto; } main { padding:24px 20px 60px; } td code { white-space:normal; } }
+  @media print { nav.toc { display:none; } .layout { display:block; } main { max-width:none; padding:0; } }
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="toc" aria-label="Contents">
+  <div class="brand"><span class="mark"></span>Pulsezen</div>
+  <p class="version">Documentation · version 1.0.0</p>
+  <ol>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#requirements">Requirements</a></li>
+    <li><a href="#package">Repository contents</a></li>
+    <li><a href="#install">Installation</a></li>
+    <li class="sub"><a href="#install-cpanel">cPanel / shared hosting</a></li>
+    <li class="sub"><a href="#install-vps">VPS (PM2 + Nginx)</a></li>
+    <li class="sub"><a href="#install-docker">Docker</a></li>
+    <li class="sub"><a href="#install-vercel">Vercel + cloud MySQL</a></li>
+    <li class="sub"><a href="#install-local">Local computer</a></li>
+    <li class="sub"><a href="#installer">Web installer</a></li>
+    <li class="sub"><a href="#first-steps">First steps</a></li>
+    <li><a href="#tracking">Adding the tracking script</a></li>
+    <li class="sub"><a href="#t-snippet">The snippet</a></li>
+    <li class="sub"><a href="#t-options">Script options</a></li>
+    <li class="sub"><a href="#t-spa">Single-page apps &amp; hash routing</a></li>
+    <li class="sub"><a href="#t-auto">Outbound links, downloads, 404</a></li>
+    <li class="sub"><a href="#t-events">Custom events &amp; revenue</a></li>
+    <li class="sub"><a href="#t-classes">Events with CSS classes</a></li>
+    <li class="sub"><a href="#t-platforms">Platform guides</a></li>
+    <li class="sub"><a href="#t-csp">Content-Security-Policy</a></li>
+    <li class="sub"><a href="#t-endpoint">The event endpoint</a></li>
+    <li><a href="#proxy">First-party proxy</a></li>
+    <li><a href="#counting">How visitors are counted</a></li>
+    <li><a href="#scheduling">Background jobs &amp; scheduling</a></li>
+    <li class="sub"><a href="#sched-how">How it works</a></li>
+    <li class="sub"><a href="#sched-secret">The cron secret</a></li>
+    <li class="sub"><a href="#sched-lazy">Lazy mode</a></li>
+    <li class="sub"><a href="#sched-cron">Cron URL</a></li>
+    <li class="sub"><a href="#sched-worker">Worker</a></li>
+    <li class="sub"><a href="#sched-vercel">Vercel &amp; serverless</a></li>
+    <li class="sub"><a href="#sched-which">Which one to use</a></li>
+    <li><a href="#retention">Data retention &amp; rollups</a></li>
+    <li><a href="#admin">Admin panel</a></li>
+    <li class="sub"><a href="#admin-dashboard">Dashboard</a></li>
+    <li class="sub"><a href="#admin-users">Users</a></li>
+    <li class="sub"><a href="#admin-sites">Websites</a></li>
+    <li class="sub"><a href="#admin-plans">Plans &amp; limits</a></li>
+    <li class="sub"><a href="#admin-payments">Payments</a></li>
+    <li class="sub"><a href="#admin-pages">Pages, blog &amp; messages</a></li>
+    <li class="sub"><a href="#admin-settings">Settings</a></li>
+    <li class="sub"><a href="#admin-analytics">Analytics settings</a></li>
+    <li class="sub"><a href="#geoip">GeoIP (locations)</a></li>
+    <li class="sub"><a href="#admin-system">System &amp; scheduler</a></li>
+    <li><a href="#customer">Customer guide</a></li>
+    <li class="sub"><a href="#c-sites">Websites</a></li>
+    <li class="sub"><a href="#c-dashboard">The dashboard</a></li>
+    <li class="sub"><a href="#c-filters">Periods &amp; filters</a></li>
+    <li class="sub"><a href="#c-props">Event properties</a></li>
+    <li class="sub"><a href="#c-goals">Goals</a></li>
+    <li class="sub"><a href="#c-reports">Email reports</a></li>
+    <li class="sub"><a href="#c-alerts">Traffic alerts</a></li>
+    <li class="sub"><a href="#c-channels">Alert channels</a></li>
+    <li class="sub"><a href="#c-webhook">Webhook payload &amp; HMAC</a></li>
+    <li class="sub"><a href="#c-share">Shared dashboards &amp; embed</a></li>
+    <li class="sub"><a href="#c-api">API keys &amp; Stats API</a></li>
+    <li><a href="#payments">Payment gateways</a></li>
+    <li><a href="#email">Email (SMTP)</a></li>
+    <li><a href="#i18n">Languages &amp; RTL</a></li>
+    <li class="sub"><a href="#i18n-packs">Bundled packs: Arabic &amp; Hindi</a></li>
+    <li><a href="#seo">SEO</a></li>
+    <li><a href="#privacy">Privacy</a></li>
+    <li><a href="#performance">Performance &amp; capacity</a></li>
+    <li><a href="#customize">Customisation</a></li>
+    <li><a href="#demo">Demo mode</a></li>
+    <li><a href="#update">Updating</a></li>
+    <li><a href="#env">Environment variables</a></li>
+    <li><a href="#troubleshooting">Troubleshooting</a></li>
+    <li><a href="#credits">Credits</a></li>
+    <li><a href="#changelog">Changelog</a></li>
+    <li><a href="#support">Support</a></li>
+  </ol>
+</nav>
+
+<main>
+<h1>Pulsezen</h1>
+<p class="lead">Privacy-friendly website analytics as a service, built with Next.js 16, React 19 and Tailwind CSS 4. A simple, cookieless alternative to Google Analytics that you run and sell yourself. Open source under the MIT licence. This guide takes you from a fresh clone to a live platform with paying customers.</p>
+<div class="card">
+  <strong>Quick start:</strong> clone the repository and upload its <code>app</code> folder (renamed to <code>pulsezen</code>), run <code>npm install</code> and <code>npm run build</code>, start the app, then open your domain in a browser. The web installer does the rest. Then read <a href="#scheduling">Background jobs &amp; scheduling</a> (daily summaries, data retention, alerts and reports depend on it) and <a href="#tracking">Adding the tracking script</a>.
+</div>
+
+<!-- ───────────────────────────── Introduction ───────────────────────────── -->
+<h2 id="introduction">Introduction</h2>
+<p>Pulsezen lets you run your own website analytics service, like Plausible, Fathom or Simple Analytics. Your customers sign up, add their <strong>websites</strong> and paste one line of code. The tiny tracking script <code>pz.js</code> (about 1.5 KB gzipped) records pageviews and events <strong>without cookies</strong>, without local storage and without fingerprinting.</p>
+<p>Every website gets a clean, live <strong>dashboard</strong>: visitors, visits, pageviews, views per visit, bounce rate and visit duration; top pages, entry and exit pages; sources and channels, including traffic from <strong>AI assistants</strong> such as ChatGPT, Perplexity, Gemini, Copilot and Claude; UTM campaigns; countries, regions and cities; browsers, operating systems, devices, screen sizes and languages; <strong>goals</strong>, custom events and <strong>revenue</strong>. Customers get weekly or monthly <strong>email reports</strong>, <strong>traffic alerts</strong> (spike, drop, “no data”) by email, Slack, Discord, Microsoft Teams, Telegram or a signed webhook, <strong>shared dashboards</strong> they can send to clients or embed in an iframe, and a <strong>Stats REST API</strong>.</p>
+<p>You earn money with <strong>paid plans</strong>. Plans limit the number of websites and monthly pageviews, set how long detailed data is kept, give access to the Stats API and remove the “Powered by” line. Payments are accepted through Stripe (automatic renewal), PayPal, Razorpay or manual bank transfer.</p>
+<div class="note">Words used in this guide: <strong>you</strong> or <strong>the administrator</strong> run the platform. <strong>Customers</strong> are the people who sign up on your platform and add websites. <strong>Visitors</strong> are the people who visit your customers' websites and are counted by Pulsezen. In the examples, your platform lives at <code>https://analytics.example.com</code> and a customer's website at <code>https://example.com</code>.</div>
+
+<!-- ───────────────────────────── Features ───────────────────────────── -->
+<h2 id="features">Features</h2>
+<div class="grid">
+  <div class="card"><strong>Cookieless tracking</strong><br>No cookies, no local storage, no fingerprinting. Anonymous visitor ids from a salt that changes every day. IP addresses are never stored.</div>
+  <div class="card"><strong>Tiny script</strong><br><code>pz.js</code> is about 1.5 KB gzipped, has no dependencies and never throws errors into the page.</div>
+  <div class="card"><strong>Single-page apps</strong><br>History and hash routing are tracked automatically: React, Vue, Next.js, Nuxt, Svelte, Angular.</div>
+  <div class="card"><strong>All key metrics</strong><br>Visitors, visits, pageviews, views per visit, bounce rate, visit duration, realtime visitors, comparison with the previous period.</div>
+  <div class="card"><strong>Sources &amp; AI traffic</strong><br>Channels (direct, search, social, AI assistants, email, paid, referral), 50+ named sources, referrers and UTM parameters.</div>
+  <div class="card"><strong>Locations &amp; devices</strong><br>Countries, regions and cities (Vercel/Cloudflare headers or a free GeoIP file), browsers, OS, devices, screens, languages.</div>
+  <div class="card"><strong>Goals &amp; revenue</strong><br>Page and event goals with conversion rates. Custom events with properties and revenue. Outbound links, file downloads and 404s.</div>
+  <div class="card"><strong>Filters</strong><br>Click any row to filter the whole dashboard. Combine up to 10 filters with is / is not / contains.</div>
+  <div class="card"><strong>Email reports</strong><br>Weekly or monthly summaries with comparison, top pages, sources and countries, sent in the website's time zone.</div>
+  <div class="card"><strong>Traffic alerts</strong><br>Spikes, drops and a broken or missing script, by email, webhook (HMAC-signed), Slack, Discord, Teams or Telegram.</div>
+  <div class="card"><strong>Shared dashboards</strong><br>A secret public link with an optional password, embeddable in an iframe, with CSV export.</div>
+  <div class="card"><strong>Stats API</strong><br>Aggregate, timeseries and breakdown endpoints with filters, for client reports and your customers' own apps.</div>
+  <div class="card"><strong>Long history, small database</strong><br>Daily summaries are kept for good, raw events are deleted after the plan's retention period.</div>
+  <div class="card"><strong>Plans &amp; billing</strong><br>Website, pageview, retention and API limits, branding removal. Stripe, PayPal, Razorpay, bank transfer.</div>
+  <div class="card"><strong>Admin panel</strong><br>Revenue, pageviews, users, all websites, plans, payments, pages, blog, languages, scheduler health.</div>
+  <div class="card"><strong>Multi-language &amp; RTL</strong><br>Translate the public site, the dashboard and shared dashboards. Right-to-left languages are supported.</div>
+</div>
+
+<!-- ───────────────────────────── Requirements ───────────────────────────── -->
+<h2 id="requirements">Requirements</h2>
+<table>
+  <tr><th>Item</th><th>Requirement</th></tr>
+  <tr><td>Node.js</td><td>20.9 or newer (22 LTS recommended). Node.js <strong>22.13+</strong> is needed only for the SQLite database option.</td></tr>
+  <tr><td>Database</td><td>MySQL 5.7+ / MariaDB 10.3+ (recommended for production), <em>or</em> the built-in SQLite option (no database server needed; fine for testing and small platforms, see <a href="#performance">Performance</a>).</td></tr>
+  <tr><td>Hosting</td><td>Any host that runs Node.js apps: a VPS, cPanel with “Setup Node.js App”, Plesk, Docker, Railway, Render, Vercel, etc. A VPS is best: it handles the most events and can run the <a href="#sched-worker">worker</a>.</td></tr>
+  <tr><td>A way to run background jobs</td><td>A cron job that opens a URL every few minutes, the worker process, or lazy mode (default, needs regular visits to the platform or tracked events). See <a href="#scheduling">Background jobs</a>.</td></tr>
+  <tr><td>HTTPS</td><td><strong>Required in production.</strong> The tracking script is loaded by your customers' HTTPS websites; browsers block scripts and requests to plain <code>http://</code> addresses there. Use a free Let's Encrypt certificate.</td></tr>
+  <tr><td>Outbound internet</td><td>HTTPS to Slack, Discord, Microsoft Teams, <code>api.telegram.org</code> and your customers' webhook URLs for alerts; SMTP (587 or 465) for email; Stripe/PayPal/Razorpay for payments.</td></tr>
+  <tr><td>Memory</td><td>At least 1 GB RAM to build (<code>npm run build</code>). Running the platform needs about 200–400 MB, plus about 50 MB for the worker. Busy platforms need more memory for the database (see <a href="#performance">Performance</a>).</td></tr>
+  <tr><td>Writable folder</td><td>The <code>storage</code> folder must be writable (configuration, SQLite database, uploaded logos).</td></tr>
+  <tr><td>GeoIP (optional)</td><td>For countries, regions and cities on hosts other than Vercel or Cloudflare: a free MaxMind GeoLite2 or DB-IP Lite <code>.mmdb</code> file (not included, see <a href="#geoip">GeoIP</a>).</td></tr>
+</table>
+<div class="note">Static-only hosting (plain HTML hosting, GitHub Pages) cannot run Pulsezen: collecting events, accounts and payments need a Node.js server.</div>
+
+<!-- ───────────────────────────── Package ───────────────────────────── -->
+<h2 id="package">Repository contents</h2>
+<pre><code>pulsezen/
+├── documentation/            This guide
+├── marketing/                Screenshot scripts and final screenshots
+└── app/                      The application source code
+    ├── src/
+    │   ├── app/              Pages, admin panel, customer dashboard, shared dashboards, API routes
+    │   ├── components/       Shared UI, dashboard and public site components
+    │   ├── analytics/        The contract: event payload, metrics, dimensions, validation
+    │   ├── tracker/          Source of the tracking script pz.js (+ README with all options)
+    │   ├── lib/              Server code: event collection, stats engine, rollups, jobs,
+    │   │   │                 scheduler, plans, payments, email
+    │   │   ├── jobs/         Background jobs (rollups, retention, alerts, reports, usage)
+    │   │   └── alerts/       Alert channels (email, webhook, Slack, Discord, Teams, Telegram)
+    │   └── fonts/            Bundled fonts and their licences
+    ├── scripts/
+    │   ├── build-widget.mjs  Builds public/pz.js (runs automatically with npm run build)
+    │   └── worker.mjs        The background worker (npm run worker)
+    ├── languages/            Language packs to import: ar.json (Arabic), hi.json (Hindi)
+    ├── public/               Public static files (pz.js is generated here)
+    ├── storage/              Created data: config.json, SQLite database, uploads
+    ├── server.js             Start file for cPanel / Passenger / PM2
+    ├── ecosystem.config.cjs  PM2 configuration (app + worker)
+    ├── Dockerfile, docker-compose.yml, .dockerignore
+    ├── .env.example          Optional environment variables
+    ├── README.md             Short developer notes
+    └── package.json</code></pre>
+<div class="note"><code>public/pz.js</code>, the tracking script your customers embed, is <strong>not</strong> in the repository. It is built from <code>src/tracker</code> every time you run <code>npm run build</code> (or <code>npm run dev</code>). If you ever see a 404 for <code>/pz.js</code>, run <code>npm run build</code> again and restart. GeoIP database files are not included either (their licences don't allow it).</div>
+
+<!-- ───────────────────────────── Install ───────────────────────────── -->
+<h2 id="install">Installation</h2>
+<p>Pick the guide that matches your hosting. Every method ends with the <a href="#installer">web installer</a>, and every method needs a way to run background jobs: read <a href="#scheduling">Background jobs</a> right after installing.</p>
+<div class="note">Install Pulsezen on its own domain or subdomain, for example <code>https://analytics.example.com</code> or <code>https://stats.yourbrand.com</code>. The tracking snippet contains this address, so changing it later means every customer must update the snippet on every website. Pick a neutral name: some ad blockers block subdomains named <code>analytics.</code> or <code>stats.</code>, and some block third-party analytics in general (customers can fix this with a <a href="#proxy">first-party proxy</a>).</div>
+
+<h3 id="install-cpanel">cPanel / shared hosting (Setup Node.js App)</h3>
+<ol class="steps">
+  <li>In cPanel open <strong>MySQL® Databases</strong>. Create a database and a user, then add the user to the database with <em>All privileges</em>. Write down the database name, username and password.</li>
+  <li>Create the subdomain (e.g. <code>analytics.example.com</code>) in <strong>Domains</strong> and turn on <strong>SSL/TLS Status → Run AutoSSL</strong> so it has HTTPS.</li>
+  <li>Open <strong>File Manager</strong> and upload <code>pulsezen.zip</code> (the repository's <code>app</code> folder renamed to <code>pulsezen</code>, zipped) to your home folder, e.g. <code>/home/youruser/pulsezen</code>, and extract it. Do <em>not</em> put it inside <code>public_html</code>.</li>
+  <li>Open <strong>Setup Node.js App</strong> → <strong>Create Application</strong>:
+    <ul>
+      <li>Node.js version: the newest available (22.x recommended)</li>
+      <li>Application mode: <code>Production</code></li>
+      <li>Application root: <code>pulsezen</code></li>
+      <li>Application URL: your domain or subdomain</li>
+      <li>Application startup file: <code>server.js</code></li>
+    </ul>
+    Click <strong>Create</strong>.</li>
+  <li>Click <strong>Run NPM Install</strong> and wait until it finishes.</li>
+  <li>Copy the command shown at the top of the page (it looks like <code>source /home/youruser/nodevenv/pulsezen/22/bin/activate &amp;&amp; cd /home/youruser/pulsezen</code>). Open <strong>Terminal</strong> in cPanel, paste it, then run:
+    <pre><code>npm run build</code></pre>
+    The build takes 1–4 minutes. It first prints <code>[tracker] public/pz.js … B gzip</code> (the tracking script), then builds the app.</li>
+  <li>Back in Setup Node.js App, click <strong>Restart</strong>. Open your domain: you will see the installer.</li>
+  <li>After installing, add the <strong>cron job</strong> from Admin → System (see <a href="#sched-cron">Cron URL</a>). On cPanel this is strongly recommended: Passenger stops idle apps, and lazy mode only runs while there is activity (platform pages or tracked events).</li>
+</ol>
+<p><code>server.js</code> starts the built Next.js app, which serves everything: pages, the API, the event endpoint and the files in <code>public</code>, including <code>/pz.js</code>. You don't need to copy anything into <code>public_html</code>.</p>
+<div class="warn">If the build stops with “JavaScript heap out of memory” your plan limits memory. Build on your own computer instead (<code>npm install &amp;&amp; npm run build</code>), then upload the whole folder <em>including</em> the <code>.next</code> folder and <code>public/pz.js</code>, and only run “Run NPM Install” + “Restart” on the server. Shared hosting is fine for small platforms; event collection on busy websites needs a VPS (see <a href="#performance">Performance</a>).</div>
+
+<h3 id="install-vps">VPS (Ubuntu) with PM2 and Nginx</h3>
+<ol class="steps">
+  <li>Install Node.js 22, Nginx and PM2:
+<pre><code>curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+sudo apt install -y nodejs nginx
+sudo npm install -g pm2</code></pre></li>
+  <li>Install MySQL (or use SQLite and skip this step):
+<pre><code>sudo apt install -y mysql-server
+sudo mysql -e "CREATE DATABASE pulsezen CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'pulsezen'@'localhost' IDENTIFIED BY 'choose-a-strong-password';
+GRANT ALL PRIVILEGES ON pulsezen.* TO 'pulsezen'@'localhost'; FLUSH PRIVILEGES;"</code></pre></li>
+  <li>Upload the <code>pulsezen</code> folder to <code>/var/www/pulsezen</code>, then build:
+<pre><code>cd /var/www/pulsezen
+npm ci
+npm run build</code></pre></li>
+  <li>Choose a <strong>cron secret</strong> and start the app <em>and</em> the worker with PM2. <code>ecosystem.config.cjs</code> starts two processes: <code>pulsezen</code> (the web app) and <code>pulsezen-worker</code> (runs the background jobs every 15 seconds). Both get the same <code>CRON_SECRET</code>:
+<pre><code>export CRON_SECRET="$(openssl rand -hex 24)"
+echo "$CRON_SECRET"          # keep a copy
+pm2 start ecosystem.config.cjs
+pm2 save &amp;&amp; pm2 startup</code></pre>
+    <div class="warn"><p><strong>Always set your own <code>CRON_SECRET</code> before <code>pm2 start</code>.</strong> Without it the worker can't run jobs (PM2 prints a warning and the worker exits), and a <code>CRON_SECRET</code> line in <code>.env.local</code> is only seen by the worker, not by the app. Export the variable before <code>pm2 start</code> (as above) or write your secret into <code>ecosystem.config.cjs</code>. Use at least 12 random characters: the app ignores shorter values and the example value <code>change-me-to-a-long-random-string</code>. After changing it run <code>pm2 restart ecosystem.config.cjs --update-env</code>.</p></div></li>
+  <li>Create <code>/etc/nginx/sites-available/pulsezen</code>:
+<pre><code>server {
+    listen 80;
+    server_name analytics.example.com;
+    client_max_body_size 10m;
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+}</code></pre>
+<code>X-Forwarded-For</code> is important: Pulsezen needs the visitor's IP address (only in memory) to tell visitors apart and to find their location. Enable the site and add a free SSL certificate:
+<pre><code>sudo ln -s /etc/nginx/sites-available/pulsezen /etc/nginx/sites-enabled/
+sudo nginx -t &amp;&amp; sudo systemctl reload nginx
+sudo apt install -y certbot python3-certbot-nginx
+sudo certbot --nginx -d analytics.example.com</code></pre></li>
+  <li>Open <code>https://analytics.example.com</code> to run the installer. Afterwards, Admin → System → Scheduler should show <em>Running</em> with the source <code>worker</code> within a minute.</li>
+</ol>
+<div class="note">Keep <code>instances: 1</code> for the web app in <code>ecosystem.config.cjs</code>. Events are buffered in memory and written in batches, and rate limits, visit tracking and some caches are kept per process. One Node.js process handles a lot of events (see <a href="#performance">Performance</a>). The worker calls <code>http://localhost:3000</code> by default; set <code>WORKER_URL</code> if the app listens elsewhere.</div>
+
+<h3 id="install-docker">Docker</h3>
+<p>The <code>app</code> folder includes a <code>Dockerfile</code> and a <code>docker-compose.yml</code> with three services: <code>app</code> (the web app), <code>worker</code> (runs background jobs every 15 seconds) and <code>db</code> (MySQL 8.4). First create a file named <code>.env</code> next to <code>docker-compose.yml</code> with your own secret:</p>
+<pre><code>CRON_SECRET=paste-a-long-random-string-here</code></pre>
+<p>Then start everything:</p>
+<pre><code>cd pulsezen
+docker compose up -d --build</code></pre>
+<p>Open <code>http://your-server:3000</code>. In the installer choose MySQL with host <code>db</code>, port <code>3306</code>, database <code>pulsezen</code>, user <code>pulsezen</code>, password <code>pulsezen</code> (change these and <code>MYSQL_ROOT_PASSWORD</code> in <code>docker-compose.yml</code> first). The <code>storage</code> folder is kept in a Docker volume. Put Nginx, Caddy or Traefik with HTTPS in front of port 3000, and make sure it sends <code>X-Forwarded-For</code>.</p>
+<div class="warn"><code>docker-compose.yml</code> refuses to start until <code>CRON_SECRET</code> is set in the <code>.env</code> file next to it (at least 12 random characters). The included <code>.dockerignore</code> keeps local <code>node_modules</code>, <code>.next</code> and <code>storage</code> folders out of the image. For a GeoIP file, copy it into the storage volume (e.g. <code>/app/storage/GeoLite2-City.mmdb</code>) and enter that path in Admin → Settings → Analytics.</div>
+<p>Without Compose:</p>
+<pre><code>docker build -t pulsezen .
+docker network create pulsezen-net
+docker run -d --name pulsezen --network pulsezen-net -p 3000:3000 \
+  -e CRON_SECRET=your-secret -v pulsezen-storage:/app/storage pulsezen
+docker run -d --name pulsezen-worker --network pulsezen-net \
+  -e WORKER_URL=http://pulsezen:3000 -e CRON_SECRET=your-secret pulsezen node scripts/worker.mjs</code></pre>
+
+<h3 id="install-vercel">Vercel (with a cloud MySQL database)</h3>
+<p>Vercel has no permanent disk, so the web installer and SQLite can't be used there. Instead, Pulsezen is configured with environment variables and a cloud MySQL-compatible database such as <strong>TiDB Cloud Serverless</strong> (free tier), Aiven or PlanetScale. A nice bonus: Vercel sends the visitor's country, region and city with every request, so locations work without a GeoIP file.</p>
+<ol class="steps">
+  <li>Create a database. In TiDB Cloud: create a <em>Serverless</em> cluster in the region closest to your Vercel functions, open <strong>Connect</strong>, generate a password and note the host, port (4000), user and password. In the SQL editor run <code>CREATE DATABASE pulsezen;</code></li>
+  <li>Fork <a href="https://github.com/epifive/pulsezen">this repository</a> on GitHub (or push your own copy).</li>
+  <li>In Vercel click <strong>Add New → Project</strong>, import the repository and set <strong>Root Directory</strong> to <code>app</code> (the folder that contains <code>package.json</code>). Keep the default build command (<code>npm run build</code>): it also builds <code>pz.js</code>.</li>
+  <li>Add these <strong>Environment Variables</strong>:
+<pre><code>DB_DRIVER=mysql
+DB_HOST=gateway01.ap-southeast-1.prod.aws.tidbcloud.com
+DB_PORT=4000
+DB_USER=xxxxxxxx.root
+DB_PASSWORD=your-password
+DB_NAME=pulsezen
+DB_SSL=true
+APP_INSTALLED=true
+ADMIN_EMAIL=you@example.com
+ADMIN_PASSWORD=a-strong-password
+ADMIN_NAME=Your Name
+SITE_URL=https://analytics.example.com
+CRON_SECRET=a-long-random-string</code></pre></li>
+  <li>Click <strong>Deploy</strong>. Tables are created automatically on the first visit and the administrator account is created from <code>ADMIN_EMAIL</code> / <code>ADMIN_PASSWORD</code>.</li>
+  <li>Add your domain in <strong>Settings → Domains</strong>, and set the same address in Admin → Settings → General → <em>Site URL</em>.</li>
+  <li>In Vercel open <strong>Settings → Functions</strong> and choose the region closest to your database.</li>
+  <li><strong>Set up the scheduler</strong> as described in <a href="#sched-vercel">Vercel &amp; serverless</a>. This step is not optional on Vercel.</li>
+</ol>
+<div class="warn">
+  <p>Vercel is fine for a demo or a small platform, but a VPS is cheaper and faster for an analytics service:</p>
+  <ul>
+    <li>Every event is one function call and one database write. On busy websites this uses a lot of function invocations and database request units.</li>
+    <li>On Vercel each event is written right after its request (no batching across requests), and rate limits and visit caches are kept per serverless instance.</li>
+    <li>There is no worker process, so background jobs depend on an external cron service.</li>
+    <li>Uploaded files are not kept (no permanent disk). Paste image URLs for your logo and favicon instead of uploading.</li>
+  </ul>
+</div>
+
+<h3 id="install-local">Local computer (for testing or customising)</h3>
+<pre><code>cd pulsezen
+npm install
+npm run dev</code></pre>
+<p>Open <code>http://localhost:3000</code> and choose <strong>SQLite</strong> in the installer. Lazy mode is on by default, so background jobs run while you click around. To run them without visiting pages, start the worker in a second terminal (copy the secret from Admin → System → Scheduler):</p>
+<pre><code>CRON_SECRET=the-secret-from-admin npm run worker</code></pre>
+<p>On Windows PowerShell: <code>$env:CRON_SECRET="the-secret"; npm run worker</code>.</p>
+<div class="note">To test tracking on your computer, add a website with the domain <code>localhost</code> (or switch on <em>Count visits from localhost</em> in its settings) and add <code>data-allow-localhost</code> to the snippet. Without both, the script ignores <code>localhost</code> pages on purpose. See <a href="#troubleshooting">Troubleshooting</a>.</div>
+
+<h3 id="installer">Web installer</h3>
+<ol class="steps">
+  <li><strong>Requirements</strong> – checks the Node.js version and that <code>storage</code> is writable.</li>
+  <li><strong>Database</strong> – choose MySQL/MariaDB (host, port, database, user, password, and <em>Use SSL</em> for cloud databases) or SQLite. Click <em>Test connection</em>, then <em>Continue</em>.</li>
+  <li><strong>Site &amp; admin</strong> – enter your platform name, the full site URL (e.g. <code>https://analytics.example.com</code>) and the administrator account. Click <em>Install now</em>.</li>
+</ol>
+<p>The installer creates all tables and indexes, the three default plans (Free, Pro, Agency), the default content pages (such as the Privacy policy and Terms of service) and starter blog posts. It writes <code>storage/config.json</code> and locks itself (<code>storage/installed.lock</code>). Sign in at <code>/login</code>. The admin panel is at <code>/admin</code>, the customer dashboard at <code>/dashboard</code>.</p>
+<div class="note">To run the installer again (e.g. to switch databases), delete <code>storage/installed.lock</code> and <code>storage/config.json</code> and restart the app. Existing data in the old database is not deleted.</div>
+
+<h3 id="first-steps">First steps after installing</h3>
+<p>The admin dashboard shows a <em>Finish setting up</em> checklist. In short:</p>
+<ol class="steps">
+  <li><strong>Settings → General</strong>: check the <em>Site URL</em>. It must be your public <code>https://</code> address: the tracking snippet, dashboard links in alerts, email reports and the cron URL are built from it. Add your logo and contact email.</li>
+  <li><strong>Admin → System → Scheduler</strong>: set up the cron URL or the worker (see <a href="#scheduling">Background jobs</a>) and check that the badge says <em>Running</em>.</li>
+  <li><strong>Settings → Email</strong>: configure SMTP. Email reports, email alerts, usage warnings and password resets need it.</li>
+  <li><strong>Settings → Analytics</strong>: set up <a href="#geoip">GeoIP</a> (unless you run on Vercel or behind Cloudflare) and the branding text shown on shared dashboards and reports.</li>
+  <li><strong>Plans</strong>: adjust prices and limits. <strong>Settings → Payments</strong>: connect at least one payment gateway.</li>
+  <li>Open <strong>/dashboard</strong>, add your own website and install the snippet. Then you can track your platform's own public site and show a live shared dashboard on your home page (see <a href="#admin-analytics">Analytics settings</a>).</li>
+</ol>
+
+<!-- ───────────────────────────── Tracking ───────────────────────────── -->
+<h2 id="tracking">Adding the tracking script</h2>
+<p>This chapter is for you <em>and</em> your customers: you can copy parts of it into your own help pages. Each website's <strong>Install</strong> page in the dashboard (<code>/dashboard/sites/&lt;id&gt;/install</code>) also shows the snippet, short guides for common platforms and a live check that waits for the first visit.</p>
+
+<h3 id="t-snippet">The snippet</h3>
+<p>Paste this into the <code>&lt;head&gt;</code> of every page. The dashboard shows it with the right address and <strong>site key</strong> (a 12-character code, also shown in <em>Site settings</em>):</p>
+<pre><code>&lt;script defer src="https://analytics.example.com/pz.js" data-site="YOUR_SITE_KEY"&gt;&lt;/script&gt;</code></pre>
+<p>That's all. Within seconds of the first visit, the Install page says <em>It works!</em> and the site settings show <em>Receiving data since …</em>. The script:</p>
+<ul>
+  <li>sends one small request per pageview or event (<code>navigator.sendBeacon</code>, or <code>fetch</code> with <code>keepalive</code> and no credentials);</li>
+  <li>sets no cookies and uses no <code>localStorage</code> or <code>sessionStorage</code>;</li>
+  <li>does nothing for automated browsers (<code>navigator.webdriver</code>, Cypress, PhantomJS, Nightmare), for <code>file:</code> pages and, unless allowed, for <code>localhost</code>;</li>
+  <li>waits until a prerendered page is actually shown;</li>
+  <li>catches all its own errors, so it can never break the website.</li>
+</ul>
+<p>Known bots, crawlers, link previews and browser prefetches are also filtered out on the server.</p>
+
+<h3 id="t-options">Script options</h3>
+<p>All options are <code>data-*</code> attributes on the script tag.</p>
+<table>
+  <tr><th>Attribute</th><th>Default</th><th>What it does</th></tr>
+  <tr><td><code>data-site</code></td><td>(required)</td><td>The site key.</td></tr>
+  <tr><td><code>data-api</code></td><td class="wrap"><code>&lt;script origin&gt;/api/event</code></td><td>Where events are sent. Needed with a <a href="#proxy">first-party proxy</a>.</td></tr>
+  <tr><td><code>data-exclude</code></td><td>none</td><td>Comma-separated path patterns that are not tracked; <code>*</code> matches anything: <code>data-exclude="/admin/*, /preview/*"</code>. Matched against the page path in the browser. (Customers can also exclude paths on the server in <em>Site settings → Pages to ignore</em>.)</td></tr>
+  <tr><td><code>data-hash</code></td><td>off</td><td>Hash-based routing: <code>#/page</code> changes are tracked as pageviews, stored as <code>/#/page</code>. See below.</td></tr>
+  <tr><td><code>data-outbound</code></td><td>on</td><td>Sends an <code>Outbound Link</code> event when a link to another website is clicked. <code>data-outbound="false"</code> turns it off.</td></tr>
+  <tr><td><code>data-downloads</code></td><td>on</td><td>Sends a <code>File Download</code> event for links to files: pdf, zip, rar, 7z, gz, tgz, doc(x), xls(x), ppt(x), csv, txt, rtf, odt, ods, epub, mp3, wav, mp4, mov, avi, mkv, dmg, pkg, exe, msi, apk, iso, deb, rpm. <code>data-downloads="false"</code> turns it off; <code>data-downloads="pdf,zip"</code> tracks only those extensions.</td></tr>
+  <tr><td><code>data-404</code></td><td>off</td><td>Put it on the snippet of your “page not found” template: the page sends a <code>404</code> event instead of a pageview.</td></tr>
+  <tr><td><code>data-respect-dnt</code></td><td>off</td><td>Don't track visitors whose browser sends “Do Not Track”.</td></tr>
+  <tr><td><code>data-allow-localhost</code></td><td>off</td><td>Track pages served from <code>localhost</code> / <code>127.0.0.1</code>. Also switch on <em>Count visits from localhost</em> in the site settings.</td></tr>
+</table>
+<p>Example with several options:</p>
+<pre><code>&lt;script defer src="https://analytics.example.com/pz.js" data-site="YOUR_SITE_KEY"
+  data-exclude="/admin/*, /checkout/*" data-downloads="pdf,zip" data-respect-dnt&gt;&lt;/script&gt;</code></pre>
+
+<h3 id="t-spa">Single-page apps and hash routing</h3>
+<p>Single-page apps (React, Vue, Next.js, Nuxt, SvelteKit, Angular …) need nothing extra. The script follows <code>history.pushState</code>, <code>history.replaceState</code> and the back/forward buttons and sends a pageview whenever the <strong>path</strong> changes. Changes of the query string alone (e.g. <code>?tab=2</code>) don't create a new pageview, and the same path is never counted twice in a row.</p>
+<p>Apps whose pages look like <code>https://example.com/#/settings</code> use <strong>hash routing</strong>. Add <code>data-hash</code> to the snippet. Hash routes that start with <code>#/</code> or <code>#!/</code> are then stored as pages such as <code>/#/settings</code>. For other hash styles (e.g. <code>#settings</code>) also switch on <em>Hash routing</em> in the site settings. Without <code>data-hash</code> the part after <code>#</code> is never sent.</p>
+<div class="note">Query strings are never stored as part of the page. <code>/pricing?ref=x</code> is stored as <code>/pricing</code>. Only the campaign parameters (<code>utm_source</code>, <code>utm_medium</code>, <code>utm_campaign</code>, <code>utm_term</code>, <code>utm_content</code>, and <code>ref</code> / <code>source</code> as a fallback for <code>utm_source</code>) and ad click ids (to detect the <em>Paid</em> channel) are read. Trailing slashes are removed (<code>/blog/</code> = <code>/blog</code>).</div>
+
+<h3 id="t-auto">Outbound links, file downloads and 404 pages</h3>
+<ul>
+  <li><strong>Outbound Link</strong> (on by default): a click (or middle-click) on a link whose host differs from the page's host. <code>www.example.com</code> and <code>example.com</code> are different hosts here, so links between them count as outbound.</li>
+  <li><strong>File Download</strong> (on by default): a click on a link to one of the file types above. The address of the link is saved as the <code>url</code> property.</li>
+  <li><strong>404</strong> (opt-in with <code>data-404</code>): the not-found page counts as a <code>404</code> event instead of a pageview, so broken links show up in the <em>Custom events</em> tab and can become a goal.</li>
+</ul>
+<p>These events count towards the monthly pageview limit like any custom event. They appear in the <em>Custom events</em> tab of the <em>Goals and events</em> card and can be used as <a href="#c-goals">goals</a>.</p>
+<div class="note">The clicked URL is saved with each Outbound Link and File Download event as the property <code>url</code>. Click the event in the <em>Custom events</em> tab to see which links were clicked and which files were downloaded (see <a href="#c-props">Event properties</a>).</div>
+
+<h3 id="t-events">Custom events, properties and revenue</h3>
+<p>Once the snippet is installed, the page has a global function <code>pulsezen()</code>:</p>
+<pre><code>pulsezen("Signup");
+pulsezen("Signup", { props: { plan: "Pro", source: "pricing-page" } });
+pulsezen("Purchase", { props: { plan: "Pro" }, revenue: { amount: 49.99, currency: "USD" } });
+pulsezen("Download", { callback: () =&gt; (location.href = "/thanks") });</code></pre>
+<table>
+  <tr><th>Part</th><th>Rules</th></tr>
+  <tr><td>Event name</td><td>Up to 120 characters; <code>&lt;</code> and <code>&gt;</code> are removed. Names are case-sensitive everywhere (goals, filters, MySQL and SQLite alike): <code>Signup</code> and <code>signup</code> are different events. Don't use the name <code>pageview</code>: it is reserved for pageviews.</td></tr>
+  <tr><td><code>props</code></td><td>Up to 20 properties. Keys up to 40 characters, values (string, number or boolean) up to 200 characters. Keys starting with <code>$</code> are reserved. Properties are saved with the event and shown when you click the event in the dashboard (<a href="#c-props">Event properties</a>).</td></tr>
+  <tr><td><code>revenue</code></td><td><code>amount</code> in major units (49.99) and an optional ISO 4217 <code>currency</code> code (3 letters). Stored in cents. The currency is kept as the reserved property <code>$currency</code>. Revenue on pageviews is ignored.</td></tr>
+  <tr><td><code>callback</code></td><td>Called once the event has been handed to the browser (also when the event is skipped, e.g. on localhost), so it is safe for redirects.</td></tr>
+</table>
+<div class="warn"><strong>Revenue is counted in the platform currency only</strong> (Admin → Settings → Payments → Currency). Amounts sent in that currency, or without a currency, are added up as revenue. Amounts in any other currency are <strong>not</strong> added (there is no currency conversion): the event and its <code>$currency</code> property are still saved, so the event's property breakdown shows how many such events arrived. Websites should send revenue in the platform currency.</div>
+<p>To send events <strong>before</strong> <code>pz.js</code> has loaded (e.g. from an inline script near the top of the page), add this one-liner before the snippet. Queued calls are sent right after the first pageview:</p>
+<pre><code>&lt;script&gt;window.pulsezen=window.pulsezen||function(){(window.pulsezen.q=window.pulsezen.q||[]).push(arguments)}&lt;/script&gt;</code></pre>
+<p>In TypeScript / React, call it safely like this:</p>
+<pre><code>declare global { interface Window { pulsezen?: (name: string, options?: object) =&gt; void } }
+
+window.pulsezen?.("Signup", { props: { plan: "Pro" } });</code></pre>
+<p>Then add a <a href="#c-goals">goal</a> with the same event name to see conversion rates.</p>
+
+<h3 id="t-classes">Events without JavaScript: CSS classes</h3>
+<p>Add <code>pulsezen-event-name=EVENT_NAME</code> to the class list of a link, button or form (use <code>+</code> for spaces). Extra <code>pulsezen-event-KEY=VALUE</code> classes become properties:</p>
+<pre><code>&lt;a href="/signup" class="button pulsezen-event-name=Signup+Click pulsezen-event-plan=pro"&gt;Start free&lt;/a&gt;
+&lt;form action="/contact" method="post" class="pulsezen-event-name=Contact+Form"&gt;…&lt;/form&gt;</code></pre>
+<p>On links, buttons and other elements the event is sent when the element (or something inside it, up to 6 levels deep) is clicked. On a <code>&lt;form&gt;</code> the event is sent when the form is <strong>submitted</strong> (after the browser's own validation passed), not on clicks inside it. This works in page builders that let you add CSS classes (WordPress block editor, Elementor, Webflow, Wix …).</p>
+
+<h3 id="t-platforms">Platform guides</h3>
+<div class="box">
+<h4>Plain HTML / any website</h4>
+<p>Open the HTML of your pages (or the shared header template) and paste the snippet just before the closing <code>&lt;/head&gt;</code> tag. Publish.</p>
+</div>
+<div class="box">
+<h4>WordPress</h4>
+<ol class="steps">
+  <li>Install a header and footer plugin such as <strong>WPCode</strong> (Insert Headers and Footers).</li>
+  <li>Open <strong>Code Snippets → Header &amp; Footer</strong> and paste the snippet into the <em>Header</em> box. Save.</li>
+  <li>Or paste it into your theme's <code>header.php</code> just before <code>&lt;/head&gt;</code> (use a child theme, or it is lost on theme updates).</li>
+</ol>
+<p>Caching and optimisation plugins (WP Rocket, LiteSpeed Cache, Autoptimize, SiteGround Optimizer …) can “delay”, combine or inline scripts. Exclude <code>pz.js</code> from these features: the script reads its <code>data-site</code> attribute from its own tag, and a combined or inlined copy has no tag.</p>
+</div>
+<div class="box">
+<h4>Shopify</h4>
+<ol class="steps">
+  <li>In Shopify admin open <strong>Online Store → Themes</strong>, then <strong>… → Edit code</strong>.</li>
+  <li>Open <code>layout/theme.liquid</code> and paste the snippet just before <code>&lt;/head&gt;</code>. Save.</li>
+</ol>
+<p>Shopify's checkout pages don't use your theme, so they are not tracked. To count purchases, call <code>pulsezen("Purchase", …)</code> on a page you control, or use the <em>Thank you</em> page if your plan allows custom scripts there.</p>
+</div>
+<div class="box">
+<h4>Wix</h4>
+<ol class="steps">
+  <li>In your Wix dashboard open <strong>Settings → Custom code</strong> (under <em>Advanced</em>).</li>
+  <li>Click <strong>+ Add custom code</strong>, paste the snippet, choose <em>All pages</em> and <em>Head</em>.</li>
+  <li>Apply, then publish your site. Custom code needs a Wix premium plan with a connected domain.</li>
+</ol>
+</div>
+<div class="box">
+<h4>Webflow</h4>
+<ol class="steps">
+  <li>Open <strong>Site settings → Custom code</strong>.</li>
+  <li>Paste the snippet into <strong>Head code</strong>.</li>
+  <li>Save changes and publish the site (custom code only runs on the published site, not in the Designer).</li>
+</ol>
+</div>
+<div class="box">
+<h4>Next.js</h4>
+<p>Add the <code>Script</code> component to the root layout (<code>app/layout.tsx</code>) or to <code>pages/_app.tsx</code>:</p>
+<pre><code>import Script from "next/script";
+
+// app/layout.tsx, inside &lt;body&gt;
+&lt;Script defer src="https://analytics.example.com/pz.js" data-site="YOUR_SITE_KEY" strategy="afterInteractive" /&gt;</code></pre>
+<p>Page changes in the App Router and the Pages Router are tracked automatically. A first-party proxy for Next.js is shown in <a href="#proxy">First-party proxy</a>.</p>
+</div>
+<div class="box">
+<h4>Google Tag Manager</h4>
+<ol class="steps">
+  <li>In Google Tag Manager create a new tag of type <strong>Custom HTML</strong>.</li>
+  <li>Paste the snippet and set the trigger to <strong>All Pages</strong>.</li>
+  <li>Save and publish the container.</li>
+</ol>
+<p>Custom events can be sent from other Custom HTML tags with <code>&lt;script&gt;window.pulsezen &amp;&amp; pulsezen("Signup")&lt;/script&gt;</code>. Note that some ad blockers block Google Tag Manager itself; pasting the snippet directly into the page is more reliable.</p>
+</div>
+<div class="box">
+<h4>Cloudflare Rocket Loader</h4>
+<p>If the website uses Rocket Loader, add <code>data-cfasync="false"</code> to the snippet so Rocket Loader leaves it alone.</p>
+</div>
+
+<h3 id="t-csp">Content-Security-Policy</h3>
+<p>Websites with a <code>Content-Security-Policy</code> header must allow your platform in two places: <code>script-src</code> (to load <code>pz.js</code>) and <code>connect-src</code> (to send events; <code>sendBeacon</code> and <code>fetch</code> both follow <code>connect-src</code>):</p>
+<pre><code>Content-Security-Policy: script-src 'self' https://analytics.example.com; connect-src 'self' https://analytics.example.com</code></pre>
+<p>With a <a href="#proxy">first-party proxy</a>, <code>'self'</code> is enough. If the inline queue one-liner is used, it also needs <code>'unsafe-inline'</code>, a nonce or a hash in <code>script-src</code>. A blocked script shows a CSP error in the browser console.</p>
+
+<h3 id="t-endpoint">The event endpoint</h3>
+<p>The script sends one <code>POST</code> per event to <code>/api/event</code>, with a <code>text/plain</code> JSON body of at most 2 KB:</p>
+<pre><code>{ "n": "pageview", "u": "https://example.com/pricing?utm_source=x", "d": "SITE_KEY", "r": "https://www.google.com/", "w": 1440 }</code></pre>
+<p><code>n</code> event name, <code>u</code> page URL (the hash only with <code>data-hash</code>), <code>d</code> site key, <code>r</code> referrer, <code>w</code> viewport width, and optionally <code>p</code> properties and <code>$</code> revenue. You can also send events from a server or an app with the same format (<code>Content-Type: text/plain</code> or <code>application/json</code>); send a real browser <code>User-Agent</code> and the visitor's IP in <code>X-Forwarded-For</code>, or the event is treated as a bot or as the server's own visit.</p>
+<table>
+  <tr><th>Answer</th><th>Meaning</th></tr>
+  <tr><td><code>202</code> (no body)</td><td>Accepted — or silently ignored: bots, excluded paths or IP addresses, over the plan limit, or the website owner's account is banned. Ignored events never reveal themselves, so bots can't probe the filters.</td></tr>
+  <tr><td><code>400</code></td><td>Invalid payload (missing name, invalid site key or URL …).</td></tr>
+  <tr><td><code>403</code></td><td>The page's hostname is not the website's domain, one of its subdomains or one of the site's <em>Other domains</em>.</td></tr>
+  <tr><td><code>404</code></td><td>Unknown site key.</td></tr>
+  <tr><td><code>413</code> / <code>415</code></td><td>Body larger than 2 KB / wrong content type.</td></tr>
+  <tr><td><code>429</code></td><td>Too many events: more than 120 per minute from one visitor IP for one website (setting <code>EVENT_RATE_LIMIT_PER_MIN</code>), or more than 600 per minute from one proxy for one website (<code>EVENT_PROXY_RATE_LIMIT_PER_MIN</code>; both limits apply to proxied events).</td></tr>
+</table>
+<p>Errors have a JSON body like <code>{"error":"Unknown site."}</code>. The endpoint allows any origin (<code>Access-Control-Allow-Origin: *</code>, no credentials); the page's hostname is checked against the website's domains instead. Like with any client-side analytics, the site key is public. Browsers can only send events from pages on the website's own hostnames, but requests without an <code>Origin</code> header are accepted too (servers and proxies may remove it), so a script on a server could still send made-up events. This is true of every web analytics tool; rate limits and the bot filter keep it bounded, and customers can reset a website's statistics if it ever happens.</p>
+
+<!-- ───────────────────────────── Proxy ───────────────────────────── -->
+<h2 id="proxy">First-party proxy (against ad blockers)</h2>
+<p>Some ad blockers and privacy extensions block requests to third-party analytics domains, or common analytics paths. Typically 5–25 % of visitors use one, more on technical websites. Customers can avoid this by serving the script and the endpoint from <strong>their own domain</strong> through a small proxy. Point <code>src</code> and <code>data-api</code> at the proxy:</p>
+<pre><code>&lt;script defer src="/stats/js/script.js" data-api="/stats/api/event" data-site="YOUR_SITE_KEY"&gt;&lt;/script&gt;</code></pre>
+<div class="warn"><p><strong>The proxy must forward the visitor's IP address in <code>X-Forwarded-For</code></strong> (all examples below do). Pulsezen uses the first address of that header for the anonymous visitor id, the location and IP exclusions. Without it, every visitor would look like the proxy server and be counted as one person.</p></div>
+<p>Replace <code>analytics.example.com</code> with your platform's domain. Use neutral paths (not <code>/analytics/</code> or <code>/pulsezen/</code>).</p>
+
+<h4>Next.js (<code>next.config.js</code>)</h4>
+<pre><code>module.exports = {
+  async rewrites() {
+    return [
+      { source: "/stats/js/script.js", destination: "https://analytics.example.com/pz.js" },
+      { source: "/stats/api/event", destination: "https://analytics.example.com/api/event" },
+    ];
+  },
+};</code></pre>
+
+<h4>Nginx</h4>
+<pre><code>location = /stats/js/script.js {
+  proxy_pass https://analytics.example.com/pz.js;
+  proxy_set_header Host analytics.example.com;
+  proxy_ssl_server_name on;
+  proxy_buffering on;
+  expires 1h;
+}
+
+location = /stats/api/event {
+  proxy_pass https://analytics.example.com/api/event;
+  proxy_set_header Host analytics.example.com;
+  proxy_ssl_server_name on;
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header X-Forwarded-Proto $scheme;
+  proxy_buffering on;
+}</code></pre>
+
+<h4>Cloudflare Worker (route it on <code>example.com/stats/*</code>)</h4>
+<pre><code>const PULSEZEN = "https://analytics.example.com";
+
+export default {
+  async fetch(request, env, ctx) {
+    const url = new URL(request.url);
+    if (url.pathname === "/stats/js/script.js") {
+      let response = await caches.default.match(request);
+      if (!response) {
+        response = await fetch(PULSEZEN + "/pz.js");
+        ctx.waitUntil(caches.default.put(request, response.clone()));
+      }
+      return response;
+    }
+    if (url.pathname === "/stats/api/event") {
+      const proxied = new Request(PULSEZEN + "/api/event", request);
+      proxied.headers.delete("cookie");
+      proxied.headers.set("X-Forwarded-For", request.headers.get("CF-Connecting-IP") || "");
+      return fetch(proxied);
+    }
+    return fetch(request);
+  },
+};</code></pre>
+
+<h4>Netlify (<code>_redirects</code>)</h4>
+<pre><code>/stats/js/script.js  https://analytics.example.com/pz.js         200
+/stats/api/event     https://analytics.example.com/api/event     200</code></pre>
+<p>Netlify forwards the visitor address in <code>X-Forwarded-For</code> automatically.</p>
+
+<h4>Checking the proxy</h4>
+<ul>
+  <li>Open <code>https://example.com/stats/js/script.js</code>: you should see the minified script.</li>
+  <li>Visit the website with an ad blocker on; the visit should appear in the dashboard within seconds (realtime counter).</li>
+  <li>If all visits come from one city or count as one visitor, <code>X-Forwarded-For</code> is missing.</li>
+</ul>
+<div class="note"><p><strong>Rate limits:</strong> a proxy sends the events of all its visitors from one IP address. An event counts as proxied when the visitor address in <code>X-Forwarded-For</code> differs from the address that connected to your platform. Proxied events are limited per visitor (120 per minute) <strong>and</strong> per proxy address and website (600 per minute by default, setting <code>EVENT_PROXY_RATE_LIMIT_PER_MIN</code>). The proxy limit is kept moderate because anyone can put made-up addresses into <code>X-Forwarded-For</code> to look like many visitors; raise it when a busy website sends more than about 10 events per second through its proxy.</p>
+<p><strong>Locations:</strong> Vercel and Cloudflare location headers describe the connection to your platform, which for proxied events is the proxy server. Pulsezen therefore ignores them for proxied events and looks up the forwarded visitor IP in the <a href="#geoip">GeoIP file</a> instead. Without a GeoIP file, proxied events have no location (country “unknown”). Direct (not proxied) events keep using the headers.</p></div>
+
+<!-- ───────────────────────────── Counting ───────────────────────────── -->
+<h2 id="counting">How visitors are counted</h2>
+<p>Pulsezen counts visitors <strong>without cookies</strong>. This chapter explains exactly how, so you can answer your customers' questions (“why is this different from Google Analytics?”).</p>
+<h3>The anonymous visitor id</h3>
+<p>For every event the server computes:</p>
+<pre><code>visitor id = SHA-256( daily salt + visitor IP + User-Agent + website id ), first 32 hex characters</code></pre>
+<ul>
+  <li>The <strong>daily salt</strong> is a random 32-byte value created for every UTC day and stored in the database. When the first event of a new day creates that day's salt, salts older than yesterday are deleted (the retention job deletes them as well), so this works even without background jobs. Once a salt is gone, nobody — not even you — can link an id back to an IP address or to the same person on another day.</li>
+  <li>The IP address is used only in memory, for this hash, the location lookup, IP exclusions and rate limits. <strong>It is never stored.</strong></li>
+  <li>Because the website id is part of the hash, the same person gets unrelated ids on different websites.</li>
+</ul>
+<h3>Metric definitions</h3>
+<table>
+  <tr><th>Metric</th><th>Definition</th></tr>
+  <tr><td>Visitors</td><td>Distinct visitor ids in the period. The id changes every day, so over several days this is the <strong>sum of daily unique visitors</strong>: a person who comes back on three days counts three times (the same way Plausible counts).</td></tr>
+  <tr><td>Visits</td><td>A visit starts with the first event of a visitor and ends after <strong>30 minutes</strong> without any event. The next event starts a new visit.</td></tr>
+  <tr><td>Pageviews</td><td>Events named <code>pageview</code>.</td></tr>
+  <tr><td>Events</td><td>Every other event (custom events, Outbound Link, File Download, 404).</td></tr>
+  <tr><td>Views per visit</td><td>Pageviews ÷ visits.</td></tr>
+  <tr><td>Bounce rate</td><td>Visits made of exactly <strong>one pageview and nothing else</strong>, ÷ visits. A visit with one pageview and a custom event (or an outbound click) is not a bounce.</td></tr>
+  <tr><td>Visit duration</td><td>Average over visits of the time between the visit's first and last event. A visit with a single pageview has a duration of 0 (there is no “ping” while the page stays open).</td></tr>
+  <tr><td>Entry / exit page</td><td>The page of a visit's first event / its last pageview.</td></tr>
+  <tr><td>Realtime visitors</td><td>Distinct visitor ids with an event in the last 5 minutes. The dashboard refreshes it every 15 seconds.</td></tr>
+  <tr><td>Conversion rate</td><td>Visitors who completed the goal ÷ visitors.</td></tr>
+</table>
+<p>Visit-level information (source, channel, UTM, location, browser, device, entry page) comes from the visit's first event. Filters on these dimensions select whole visits; filters on page, hostname, event and goal select single events.</p>
+<h3>Sources and channels</h3>
+<p>The source is the referrer's website, normalised to a name (“Google”, “ChatGPT”, “Reddit”, or the hostname for unknown sites). A <code>utm_source</code> (or <code>ref</code> / <code>source</code>) parameter overrides the referrer. Links from the website to itself are not referrers. The channel is decided in this order:</p>
+<ol>
+  <li><strong>Paid</strong> – <code>utm_medium</code> such as cpc, ppc, paid, display, or an ad click id (<code>gclid</code>, <code>gbraid</code>, <code>wbraid</code>, <code>msclkid</code>, <code>dclid</code>, <code>ttclid</code>, <code>twclid</code>, <code>li_fat_id</code>, <code>gad_source</code>).</li>
+  <li><strong>Email</strong> – <code>utm_medium</code> email/newsletter, a <code>utm_source</code> containing newsletter or email, or webmail (Gmail, Outlook, Yahoo Mail, Proton Mail).</li>
+  <li><strong>Social</strong> – <code>utm_medium=social</code> or a known network (X, Facebook, Instagram, LinkedIn, Reddit, YouTube, TikTok, Pinterest, Threads, Bluesky, Mastodon, Hacker News, WhatsApp, Telegram, Discord …).</li>
+  <li><strong>AI assistants</strong> – ChatGPT, Perplexity, Gemini, Copilot, Claude, DeepSeek, Poe, You.com, Phind, Meta AI, Grok, Mistral, Kimi.</li>
+  <li><strong>Search</strong> – Google, Bing, DuckDuckGo, Yahoo, Yandex, Baidu, Ecosia, Brave Search, Startpage, Qwant, Kagi, Naver, Seznam, or <code>utm_medium=organic</code>.</li>
+  <li><strong>Referral</strong> – any other referrer or <code>utm_source</code>.</li>
+  <li><strong>Direct</strong> – no referrer and no campaign parameters (typed URL, bookmark, many apps). Shown as the source <em>Direct / None</em>.</li>
+</ol>
+<p>AI assistants often send no referrer at all (especially their mobile apps); such visits count as <em>Direct</em>. Many AI tools add <code>utm_source=chatgpt.com</code> to links, which Pulsezen recognises.</p>
+<h3>Accuracy: what to expect</h3>
+<ul>
+  <li><strong>Ad blockers</strong> may block the script or the endpoint. A <a href="#proxy">first-party proxy</a> recovers most of these visits.</li>
+  <li><strong>Visitors without JavaScript</strong> and most bots are not counted (on purpose).</li>
+  <li><strong>Returning visitors</strong> are new visitors every day: there is no long-term visitor id, so “new vs returning” isn't available.</li>
+  <li>People behind the same IP address with the same browser version (an office, a school, some mobile networks) share one id on that day. A phone that changes networks during a day (Wi-Fi to mobile data) gets a new id.</li>
+  <li>The salt changes at <strong>midnight UTC</strong>. A visit that continues past midnight UTC starts again as a new visitor and visit. For websites in a time zone far from UTC, the “unique visitors” of one local day can therefore count a few people twice.</li>
+  <li>Visit duration is shorter than Google Analytics' engagement time, because the time on the last page of a visit is not known.</li>
+</ul>
+<div class="note"><strong>Why numbers differ from Google Analytics:</strong> GA4 uses cookies (a returning visitor is the same user for up to two years), is blocked more often by ad blockers and consent banners (visitors who decline aren't counted, or are modelled), filters bots differently and defines sessions, bounce and engagement differently. Differences of 10–40 % are normal. Compare trends, not exact numbers.</div>
+
+<!-- ───────────────────────────── Scheduling ───────────────────────────── -->
+<h2 id="scheduling">Background jobs &amp; scheduling</h2>
+<p>Events are collected the moment they arrive; that never depends on the scheduler. But several important things happen in the background, and something must start them. <strong>Read this chapter before you invite customers.</strong></p>
+
+<h3 id="sched-how">How it works</h3>
+<p>A <strong>tick</strong> runs these jobs one after the other, within a time budget. Each job does a small slice of work and remembers when it should run again, so ticks every 15 seconds are cheap. Whatever doesn't fit is picked up by the next tick. A lock in the database makes sure two ticks never run at the same time.</p>
+<table>
+  <tr><th>Job</th><th>What it does</th><th>How often</th></tr>
+  <tr><td><code>rollups</code></td><td>Builds the <a href="#retention">daily summaries</a> of finished days, in each website's time zone, about 3 minutes after local midnight. Up to 40 days per tick (a backlog is spread over several ticks).</td><td>Looks every 5 minutes</td></tr>
+  <tr><td><code>retention</code></td><td>Deletes raw events older than the owner's plan allows (only days that are already summarised; at most 5,000 events per website per tick), visitor salts older than yesterday, and alert log entries older than 90 days.</td><td>Every hour (sooner while there is a backlog)</td></tr>
+  <tr><td><code>traffic-alerts</code></td><td>Checks every active <a href="#c-alerts">traffic alert</a> and sends the alerts.</td><td>Every 5 minutes</td></tr>
+  <tr><td><code>reports</code></td><td>Sends due weekly (Monday) and monthly (1st) <a href="#c-reports">email reports</a>, up to 20 per tick. Waits while SMTP isn't configured.</td><td>Every 10 minutes</td></tr>
+  <tr><td><code>usage</code></td><td>Emails customers who reach 80 % and 100 % of their monthly pageview limit (once each per month, up to 50 per tick). Waits while SMTP isn't configured.</td><td>Every 15 minutes</td></tr>
+</table>
+<div class="warn"><strong>Without ticks</strong>, raw events are never summarised or deleted (the database keeps growing and plan retention is not applied), and no reports, alerts or usage emails are sent. Long date ranges are also slower without summaries. (Old visitor salts are deleted even without ticks: when the first event of a new day creates that day's salt.)</div>
+<p>There are four ways to start ticks:</p>
+<table>
+  <tr><th>Method</th><th>How often</th><th>Best for</th></tr>
+  <tr><td><strong>Lazy mode</strong> (on by default)</td><td>When the platform serves one of its own pages (public site, dashboard, admin) or receives a tracked event, and no tick ran for a minute. Only <em>while there is activity</em>.</td><td>Trying Pulsezen; small platforms.</td></tr>
+  <tr><td><strong>Cron URL</strong></td><td>Every time the URL is opened: every 1–5 minutes.</td><td>cPanel, shared hosting, Vercel (with an external cron service).</td></tr>
+  <tr><td><strong>Worker</strong> (<code>npm run worker</code>)</td><td>Every 15 seconds.</td><td>VPS and Docker.</td></tr>
+  <tr><td><strong>Run jobs now</strong></td><td>When you click the button in Admin → System. Ignores the jobs' own intervals.</td><td>Testing.</td></tr>
+</table>
+<p>The methods can be combined safely. A tick started while another is running simply does nothing.</p>
+
+<h3 id="sched-secret">The cron secret</h3>
+<p>The cron URL and the worker are protected by a secret:</p>
+<ul>
+  <li>If the environment variable <code>CRON_SECRET</code> is set (at least 12 characters, not the example value), that value is the secret.</li>
+  <li>Otherwise Pulsezen creates a random secret the first time it is needed and stores it in the database.</li>
+</ul>
+<p>To see it, open <strong>Admin → System</strong>. The <strong>Scheduler</strong> card shows the complete <em>Cron URL</em> (with a Copy button) and a ready-made cron line. Click <strong>New secret</strong> to replace a stored secret, e.g. if it leaked; the old URL stops working immediately, so update your cron job and worker. The button is hidden while the secret comes from <code>CRON_SECRET</code>: change the environment variable instead and restart. (A <code>CRON_SECRET</code> that is ignored because it is too short or the example value doesn't count: then the stored secret is in use and the button works.)</p>
+<p>The secret can be sent in two ways:</p>
+<pre><code>curl -fsS "https://analytics.example.com/api/cron/tick?key=YOUR-SECRET"
+curl -fsS -H "Authorization: Bearer YOUR-SECRET" https://analytics.example.com/api/cron/tick</code></pre>
+<p>GET and POST both work. A correct call answers with a JSON summary, for example <code>{"source":"cron","startedAt":"…","jobs":{"rollups":3,"retention":0,"traffic-alerts":0,"reports":1,"usage":0},"failed":[],"skipped":[],"durationMs":840,"skippedLocked":false}</code>. The numbers are the items each job handled (days summarised, events deleted, alerts sent, reports sent, usage emails sent). A wrong or missing secret answers <code>401</code>. More than 30 calls per minute from one IP address answer <code>429</code>.</p>
+
+<h3 id="sched-lazy">Lazy mode (default, no setup)</h3>
+<p>With <em>Settings → Analytics → Run background jobs on visits</em> switched on, the platform runs a tick <strong>after</strong> it has answered a page request or a tracked event (<code>POST /api/event</code>), whenever no tick ran during the last minute. The visitor never waits. A lazy tick has an 8-second time budget, and each server process tries at most once every 15 seconds.</p>
+<div class="warn">Lazy mode only works while there is activity: people opening your platform's pages (public site, dashboard, admin panel) or events arriving from your customers' websites. At night, or on a new platform, nothing may run (e.g. no report goes out on time and no “no traffic” alert fires). On cPanel, Passenger also stops the app after a period without requests. Use it to get started, then add the cron URL or the worker. You can leave lazy mode on as a backup: it does nothing while cron or the worker keep ticks fresh.</div>
+
+<h3 id="sched-cron">Cron URL</h3>
+<p>Open the URL every minute (every 5 minutes is also fine) from any scheduler. Copy the exact URL from Admin → System → Scheduler.</p>
+<h4>cPanel</h4>
+<ol class="steps">
+  <li>Open <strong>Cron Jobs</strong> in cPanel.</li>
+  <li>Under <em>Add New Cron Job</em> choose <strong>Once Per Minute (* * * * *)</strong> (or <em>Once Per Five Minutes</em>).</li>
+  <li>Command:
+<pre><code>curl -fsS "https://analytics.example.com/api/cron/tick?key=YOUR-SECRET" &gt;/dev/null 2&gt;&amp;1</code></pre>
+  If your host has no <code>curl</code>, use <code>wget -q -O /dev/null "https://analytics.example.com/api/cron/tick?key=YOUR-SECRET"</code>.</li>
+  <li>Click <strong>Add New Cron Job</strong>. Within a few minutes Admin → System shows <em>Running</em> with the source <code>cron</code>.</li>
+</ol>
+<h4>Linux crontab (VPS)</h4>
+<p>Run <code>crontab -e</code> and add:</p>
+<pre><code>* * * * * curl -fsS -m 70 "https://analytics.example.com/api/cron/tick?key=YOUR-SECRET" &gt;/dev/null 2&gt;&amp;1</code></pre>
+<h4>cron-job.org, EasyCron and other online cron services</h4>
+<ol class="steps">
+  <li>Create a free account on <a href="https://cron-job.org">cron-job.org</a> (or EasyCron, etc.).</li>
+  <li>Create a cron job with the URL <code>https://analytics.example.com/api/cron/tick?key=YOUR-SECRET</code>.</li>
+  <li>Schedule: <strong>every 1 minute</strong> (or every 5 minutes). Request method GET. Timeout: the maximum allowed (a tick can take up to about 45 seconds when there is a backlog).</li>
+  <li>Turn on failure notifications if the service offers them, so you hear about it when your platform stops answering.</li>
+</ol>
+<p>Instead of putting the key in the address you can add a request header <code>Authorization: Bearer YOUR-SECRET</code>, if the service supports custom headers.</p>
+<h4>GitHub Actions</h4>
+<p>Possible as a fallback: GitHub runs scheduled workflows at most every 5 minutes, often later. Store the secret as a repository secret named <code>PULSEZEN_CRON_SECRET</code> and add <code>.github/workflows/pulsezen-tick.yml</code>:</p>
+<pre><code>name: Pulsezen tick
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+jobs:
+  tick:
+    runs-on: ubuntu-latest
+    steps:
+      - run: curl -fsS -m 70 -H "Authorization: Bearer ${{ secrets.PULSEZEN_CRON_SECRET }}" https://analytics.example.com/api/cron/tick</code></pre>
+
+<h3 id="sched-worker">Worker (every 15 seconds)</h3>
+<p>The worker is a tiny Node.js script (<code>scripts/worker.mjs</code>) that calls the cron URL of the running app every 15 seconds. It needs the app to be running and the same secret.</p>
+<pre><code>CRON_SECRET=YOUR-SECRET npm run worker</code></pre>
+<table>
+  <tr><th>Variable</th><th>Meaning</th></tr>
+  <tr><td><code>CRON_SECRET</code></td><td>Required. The same value the app uses (environment variable), or the secret shown in Admin → System. At least 12 characters; the example value <code>change-me-to-a-long-random-string</code> is ignored by the app (the worker then gets <code>401</code>).</td></tr>
+  <tr><td><code>WORKER_URL</code></td><td>Address of the app. Default: <code>SITE_URL</code>, else <code>http://localhost:$PORT</code>.</td></tr>
+  <tr><td><code>PORT</code></td><td>App port used for the default address (default 3000).</td></tr>
+  <tr><td><code>WORKER_INTERVAL_SEC</code></td><td>Seconds between ticks (default 15, minimum 5).</td></tr>
+</table>
+<p>The worker also reads <code>.env</code>, <code>.env.local</code> and <code>.env.production</code> in the current folder. It prints a line when it starts, a line for every tick that did something (items per job, e.g. <code>[worker] rollups 3, retention 120 (840 ms)</code>, plus failed jobs and jobs left for the next tick), and a line when something goes wrong; a <code>401</code> in its log means the secret doesn't match. Admin → System → Scheduler shows the last tick as well.</p>
+<ul>
+  <li><strong>PM2:</strong> <code>pm2 start ecosystem.config.cjs</code> starts the worker as <code>pulsezen-worker</code> next to the app. See the <a href="#install-vps">VPS guide</a> for setting <code>CRON_SECRET</code>. Logs: <code>pm2 logs pulsezen-worker</code>.</li>
+  <li><strong>Docker:</strong> the <code>worker</code> service in <code>docker-compose.yml</code> runs it with <code>WORKER_URL=http://app:3000</code>. Logs: <code>docker compose logs -f worker</code>.</li>
+  <li><strong>systemd:</strong> create a service with <code>ExecStart=/usr/bin/node /var/www/pulsezen/scripts/worker.mjs</code>, <code>WorkingDirectory=/var/www/pulsezen</code>, <code>Environment=CRON_SECRET=…</code> and <code>Restart=always</code>.</li>
+</ul>
+
+<h3 id="sched-vercel">Vercel &amp; serverless hosting</h3>
+<ul>
+  <li><strong>Vercel Hobby (free)</strong> cron jobs run at most <strong>once a day</strong>. That is too rare: traffic alerts would be checked once a day. Use an external service such as <a href="https://cron-job.org">cron-job.org</a> to open the cron URL every 1–5 minutes (see above). Set <code>CRON_SECRET</code> in Vercel's environment variables and use the same value in the URL.</li>
+  <li><strong>Vercel Pro</strong> supports per-minute cron jobs. Add a <code>vercel.json</code> next to <code>package.json</code>:
+<pre><code>{
+  "crons": [{ "path": "/api/cron/tick", "schedule": "*/5 * * * *" }]
+}</code></pre>
+  When <code>CRON_SECRET</code> is set in the project, Vercel sends it automatically as <code>Authorization: Bearer …</code>, which Pulsezen accepts.</li>
+  <li><strong>Time limits:</strong> a tick started by the cron URL uses a time budget of 45 seconds and the route allows up to 60 seconds, which fits the default function limit. Lazy ticks use 8 seconds.</li>
+  <li>The worker can't run on serverless platforms. Railway, Render and Fly.io can run it as a second, always-on service.</li>
+</ul>
+
+<h3 id="sched-which">Which one should I use?</h3>
+<table>
+  <tr><th>Hosting</th><th>Recommended</th></tr>
+  <tr><td>VPS with PM2</td><td>Worker (already in <code>ecosystem.config.cjs</code>). Optionally a crontab entry as a backup.</td></tr>
+  <tr><td>Docker</td><td>The <code>worker</code> service in <code>docker-compose.yml</code>.</td></tr>
+  <tr><td>cPanel / Plesk / shared hosting</td><td>Cron URL every 1–5 minutes from the hosting panel.</td></tr>
+  <tr><td>Vercel</td><td>External cron service every 1–5 minutes (Hobby) or Vercel Cron (Pro).</td></tr>
+  <tr><td>Local testing</td><td>Lazy mode, <em>Run jobs now</em>, or <code>npm run worker</code>.</td></tr>
+</table>
+<p>To check the result at any time, open <strong>Admin → System → Scheduler</strong>: <em>Running</em> means a tick finished in the last 3 minutes.</p>
+
+<!-- ───────────────────────────── Retention ───────────────────────────── -->
+<h2 id="retention">Data retention &amp; rollups</h2>
+<p>Analytics data grows fast: every pageview is one row. Pulsezen keeps the database small with two kinds of data:</p>
+<table>
+  <tr><th>Data</th><th>What it is</th><th>How long it is kept</th></tr>
+  <tr><td><strong>Raw events</strong></td><td>One row per pageview or event, with page, source, location, device, visit, visitor id and custom properties.</td><td>The owner's plan's <em>Keep detailed data (days)</em>: Free 30, Pro 365, Agency 730 by default. <code>0</code> = forever. Websites of administrators are never pruned. Customers without an active paid plan use the free plan's value; if no plan is marked as the free plan, <em>Settings → Analytics → Keep detailed data</em> applies (default 30, like the free plan).</td></tr>
+  <tr><td><strong>Daily summaries</strong> (rollups)</td><td>One row per website, day (in the website's time zone), dimension and value: visitors, visits, pageviews, events, bounces, total duration and revenue. Built for every dimension: pages, entry and exit pages, hostnames, events, channels, sources, referrers, UTM parameters, countries, regions, cities, browsers, OS, devices, screens and languages.</td><td><strong>Forever</strong> (until the website or its statistics are deleted).</td></tr>
+</table>
+<p>Raw events are deleted only after their day has been summarised, so nothing is lost by mistake. The dashboard reads old days from the summaries automatically: a customer on the Free plan still sees a full 12-month chart, top pages, sources and countries for every month. Unfiltered ranges of three months or more also read finished days from the summaries, which makes long ranges fast.</p>
+<h4>What needs raw events</h4>
+<p>Summaries can answer “no filter” and a <strong>single “is” filter</strong> exactly for the totals and the chart (e.g. <em>country is DE</em>, or <em>page is /pricing</em>), and for the list of that same dimension. They can't combine dimensions. For days that only exist as summaries:</p>
+<ul>
+  <li>With two or more filters, or <em>is not</em> / <em>contains</em> filters, those days are <strong>left out</strong> everywhere, and the dashboard shows a notice: “Some days in this range only have daily summaries … These filters can't be applied to them, so those days are left out.” The Stats API returns <code>"approximate": true</code>.</li>
+  <li>With a single “is” filter, the totals and the chart include those days, but lists by <strong>other</strong> dimensions (e.g. pages while filtering by country) and goal conversions leave them out. The dashboard shows a notice about this, and Stats API breakdowns return <code>"approximate": true</code>.</li>
+  <li>The <em>AI assistants</em> tab (sources in the AI channel) reads the summaries of the known AI sources, so long ranges are complete.</li>
+  <li>Hourly charts are empty for those days (only today and yesterday use hourly charts, so this matters only with a retention of 1 day).</li>
+  <li>Pageview goals with a wildcard (e.g. <code>/blog/*</code>) count a visitor once per matching page per day, so unique conversions can be slightly higher than with raw data.</li>
+  <li>Realtime visitors and <a href="#c-props">event properties</a> need raw events: properties are not summarised, so the property lists only count days that still have raw events.</li>
+</ul>
+<div class="note">Plan retention is applied every hour by the <code>retention</code> job. When a customer downgrades (or a paid plan ends), the free plan's retention applies from then on, and older raw events are deleted at the next run. Upgrading later can't bring them back; the summaries stay. Mention this on your pricing page.</div>
+<div class="note">Changing a website's <strong>time zone</strong> rebuilds the summaries of every day that still has raw events in the new time zone (the <code>rollups</code> job does it within a few minutes). Older days whose raw events were already deleted keep their old day boundaries.</div>
+
+<!-- ───────────────────────────── Admin ───────────────────────────── -->
+<h2 id="admin">Admin panel</h2>
+<p>Open <code>/admin</code> while signed in as an administrator. The menu has Dashboard, Users, Websites, Plans, Payments, Pages, Blog, Languages, Messages, Settings and System. Administrators also have a customer dashboard (<code>/dashboard</code>) for their own websites, without plan limits and without data retention.</p>
+
+<h3 id="admin-dashboard">Dashboard</h3>
+<p>Shows the number of users (and new users in the last 30 days), active paid plans, revenue this month and pageviews in the last 30 days across all websites, a chart of daily pageviews for the last 14 days, the <em>Finish setting up</em> checklist, the busiest websites, the newest users and the latest payments. The pageview numbers come from the daily summaries, so they cover finished days and need the <a href="#scheduling">scheduler</a>.</p>
+
+<h3 id="admin-users">Users</h3>
+<p>Search and filter users. Open a user to edit the name, email, role (user or admin) and status (active or banned), set a new password, or give a paid plan until a date you choose — useful for bank transfers, gifts or testing. The user page also lists their payments.</p>
+<p><strong>Banning</strong> a user signs them out and stops collecting data for all their websites (new events are dropped silently), and their shared dashboards and API keys stop working. Their data is kept.</p>
+<p><strong>Deleting</strong> a user removes the account and everything it owns, in one database transaction: sign-in sessions, password reset links, all their websites with their statistics (raw events and daily summaries), goals, email reports and traffic alerts, their alert channels, API keys and monthly usage counters. Their <strong>payments are kept</strong> for your accounting and show as “Deleted user” in Admin → Payments. This can't be undone; banning is the reversible alternative.</p>
+
+<h3 id="admin-sites">Websites</h3>
+<p>Every website on the platform with its time zone, owner, pageviews in the last 30 days, the time of the last event, whether tracking is installed (<em>Verified</em> after the first event) and the date it was added. Search by name, domain or owner. Use it to help customers (“is my script working?”), spot abuse and see the load on your server. Customers add and edit websites themselves in their dashboard.</p>
+
+<h3 id="admin-plans">Plans &amp; limits</h3>
+<p>The installer creates three plans. Prices are in your currency (Settings → Payments).</p>
+<table>
+  <tr><th>Plan</th><th>Price</th><th>Websites</th><th>Pageviews / month</th><th>Detailed data</th><th>Stats API</th><th>Branding</th></tr>
+  <tr><td><strong>Free</strong></td><td>0</td><td>1</td><td>10,000</td><td>30 days</td><td>No</td><td>Shown</td></tr>
+  <tr><td><strong>Pro</strong> <span class="tag">Recommended</span></td><td>9 / month or 90 / year</td><td>10</td><td>200,000</td><td>1 year</td><td>Yes</td><td>Removed</td></tr>
+  <tr><td><strong>Agency</strong></td><td>29 / month or 290 / year</td><td>50</td><td>2,000,000</td><td>2 years</td><td>Yes</td><td>Removed</td></tr>
+</table>
+<p>Each plan has these fields:</p>
+<table>
+  <tr><th>Field</th><th>Meaning</th></tr>
+  <tr><td>Name, short description</td><td>Shown on the pricing page.</td></tr>
+  <tr><td>Monthly price, yearly price</td><td>Enter the amount, e.g. <code>9.00</code>. <code>0</code> hides that billing period.</td></tr>
+  <tr><td>Websites</td><td>How many websites the customer can add. <strong>0 = unlimited.</strong></td></tr>
+  <tr><td>Pageviews per month</td><td>Pageviews <strong>and</strong> custom events (including outbound link, download and 404 events), all websites of the account together, per calendar month (UTC). <strong>0 = unlimited.</strong> See below.</td></tr>
+  <tr><td>Keep detailed data (days)</td><td>How long raw events are kept; daily summaries are kept for good (see <a href="#retention">Data retention</a>). <strong>0 = unlimited.</strong></td></tr>
+  <tr><td>Team members</td><td>Reserved for a future team feature. Version 1.0 has no team accounts; the value is not used.</td></tr>
+  <tr><td>Stats API</td><td>Customers can create API keys and use the <a href="#c-api">Stats API</a>.</td></tr>
+  <tr><td>Features</td><td>One per line. Shown with a tick on the pricing page. <strong>Display text only</strong>: only the limits on this page are enforced.</td></tr>
+  <tr><td>Remove branding</td><td>Hides the “Powered by …” line on the customer's shared dashboards and email reports.</td></tr>
+  <tr><td>Recommended</td><td>Highlights the plan on the pricing page.</td></tr>
+  <tr><td>Show on pricing page</td><td>Hidden plans can still be given to users by an administrator.</td></tr>
+  <tr><td>This is the free plan</td><td>Mark exactly one plan as free. Its limits apply to every customer without an active paid plan.</td></tr>
+  <tr><td>Sort order</td><td>Lower numbers appear first.</td></tr>
+</table>
+<div class="note">In version 1.0 goals, custom events and properties, revenue, email reports, traffic alerts (all channel types) and shared dashboards are available on <strong>every</strong> plan; only the limits above are enforced. The default feature lines say so (the Free plan lists <em>Email reports and traffic alerts</em>; Pro and Agency list their limits, the Stats API and branding removal plus <em>Everything in Free / Pro</em>). If you add lines such as “Priority support”, make sure you deliver them.</div>
+<h4>The monthly pageview limit</h4>
+<ul>
+  <li>The dashboard shows every customer a <em>Pageviews this month</em> meter and a banner near and over the limit. With SMTP configured, the customer gets an email at 80 % and at 100 %.</li>
+  <li>Events keep being recorded up to <strong>10 % above</strong> the limit (a grace margin, so a short spike doesn't lose data). After that, new pageviews and events are dropped silently until the 1st of the next month (UTC) or an upgrade. The tracked website is never affected.</li>
+  <li>Limits are read from a cache that refreshes every minute, so an upgrade takes effect within a minute.</li>
+</ul>
+<h4>Administrators and downgrades</h4>
+<ul>
+  <li>Administrators have unlimited websites and pageviews, Stats API access, no branding and no data retention.</li>
+  <li>When a paid plan ends, the customer moves back to the free plan. Websites above the free plan's limit are kept and keep collecting data (within the pageview limit), but no new websites can be added. Raw events older than the free plan's retention are deleted at the next run of the retention job; API keys stop working if the free plan has no Stats API.</li>
+</ul>
+
+<h3 id="admin-payments">Payments</h3>
+<p>Every payment from every gateway, with a filter by status. Bank transfers wait here with the customer's transaction reference: click <em>Approve</em> to activate the plan, or <em>Reject</em>. Paying again while a plan is active adds another month or year to it.</p>
+
+<h3 id="admin-pages">Pages, blog and messages</h3>
+<p><strong>Pages:</strong> content pages (About, Privacy policy, Terms…) in Markdown, published at <code>/p/your-slug</code> and optionally linked in the footer. <code>{site_name}</code> and <code>{site_email}</code> are replaced automatically. Review the default Privacy policy and Terms with your own legal details before launch (see <a href="#privacy">Privacy</a>).</p>
+<p><strong>Blog:</strong> articles in Markdown at <strong>Admin → Blog</strong>. Each post has a title, URL slug (<code>/blog/your-slug</code>), excerpt, cover image (upload or URL), meta description and status. Leave the publish date empty to publish now, or pick a future date (UTC) to schedule the post. Published posts appear at <code>/blog</code>, in the sitemap and, the latest ones, on the home page. Starter articles are included. Switch the whole blog off in Settings → General.</p>
+<p><strong>Messages:</strong> contact-form submissions; reply by email with one click.</p>
+
+<h3 id="admin-settings">Settings</h3>
+<table>
+  <tr><th>Section</th><th>What you configure</th></tr>
+  <tr><td>General</td><td>Platform name, tagline, <strong>Site URL</strong>, contact email, logo (light and dark), favicon, footer text, copyright line, blog on/off.</td></tr>
+  <tr><td>Appearance</td><td>Brand colour, default theme (light/dark/follow the device), home page headline and introduction, benefits strip.</td></tr>
+  <tr><td>SEO</td><td>Home title and description, keywords, title separator, social image, Google/Bing verification, extra robots.txt rules.</td></tr>
+  <tr><td><strong>Analytics</strong></td><td>Scheduler, default data retention, GeoIP file, extra bot patterns, branding, home page showcase, tracking your own website. See below.</td></tr>
+  <tr><td>Payments</td><td>Currency (also used to show revenue in dashboards) and the four gateways.</td></tr>
+  <tr><td>Email</td><td>SMTP server for email reports, email alerts, usage warnings, password resets and contact-form messages.</td></tr>
+  <tr><td>Users</td><td>Open/close registration, contact page, cookie notice on your own site.</td></tr>
+  <tr><td>Advanced</td><td>Maintenance mode, extra code in <code>&lt;head&gt;</code> (e.g. a verification meta tag), additional code (chat widgets). To track your own platform, use Settings → Analytics → <em>Track this website with Pulsezen</em>.</td></tr>
+</table>
+<div class="note">Maintenance mode only hides your public marketing pages. Event collection, the customer dashboard, shared dashboards, the Stats API and the cron URL keep working.</div>
+
+<h3 id="admin-analytics">Settings → Analytics</h3>
+<table>
+  <tr><th>Setting</th><th>Default</th><th>Meaning</th></tr>
+  <tr><td>Run background jobs on visits (no cron needed)</td><td>On</td><td><a href="#sched-lazy">Lazy mode</a>. Keep it on unless you have set up the cron URL or the worker; it does no harm as a backup.</td></tr>
+  <tr><td>Keep detailed data (days) when no plan is marked as free</td><td>30</td><td>Retention for customers without an active paid plan when no plan is marked as the free plan (and for websites without an owner). Normally each plan's own retention applies: customers without a paid plan get the free plan's. <code>0</code> = unlimited.</td></tr>
+  <tr><td>GeoIP database file</td><td>(empty)</td><td>Full path to a <code>.mmdb</code> file for countries, regions and cities. See <a href="#geoip">GeoIP</a>.</td></tr>
+  <tr><td>Extra bot patterns</td><td>(empty)</td><td>One user-agent fragment per line (not case-sensitive). Visits whose user agent contains one of them are ignored, on top of the built-in list (the <code>isbot</code> library, empty or very short user agents, and prefetch/preview requests). Example: <code>uptimerobot</code>, <code>headlesschrome</code>, the name of a customer's own monitoring tool.</td></tr>
+  <tr><td>Branding text</td><td>Powered by Pulsezen</td><td>Shown on shared dashboards and in email reports. Change it to your brand. Empty = never shown. Plans with <em>Remove branding</em> never show it.</td></tr>
+  <tr><td>Branding link</td><td>(empty)</td><td>Where the branding link goes. Empty = your Site URL. Free shared dashboards become free advertising for your platform.</td></tr>
+  <tr><td>Shared dashboard on your home page</td><td>(empty)</td><td>The share token of one of <em>your own</em> websites' <a href="#c-share">public dashboards</a> (the last part of <code>/share/&lt;token&gt;</code>). The home page then shows its live numbers and links to it as a demo. Empty = the home page shows example numbers.</td></tr>
+  <tr><td>Track this website with Pulsezen</td><td>(empty)</td><td>The site key (<code>data-site</code>) of one of your own websites. The tracking script is then added to every public page of your platform (home, pricing, blog, pages); the dashboard and admin panel are never tracked. Empty = off.</td></tr>
+</table>
+<p><strong>Showing your own numbers on the home page</strong> (a great demo for visitors):</p>
+<ol class="steps">
+  <li>In <code>/dashboard</code> add a website with your platform's domain (e.g. <code>analytics.example.com</code>).</li>
+  <li>Copy its site key from <em>Site settings</em> and paste it into <em>Track this website with Pulsezen</em>. Your public pages are now counted.</li>
+  <li>In the website's settings turn on the <em>Public dashboard</em> and copy the token from the link (<code>/share/<strong>token</strong></code>).</li>
+  <li>Paste the token into <em>Shared dashboard on your home page</em> and save.</li>
+</ol>
+
+<h3 id="geoip">GeoIP: countries, regions and cities</h3>
+<p>Pulsezen finds a visitor's location in this order, and never stores the IP address:</p>
+<ol>
+  <li><strong>Vercel</strong> headers (<code>x-vercel-ip-country</code>, <code>-country-region</code>, <code>-city</code>) when the platform runs on Vercel.</li>
+  <li><strong>Cloudflare</strong> headers when the platform's domain is proxied by Cloudflare: <code>cf-ipcountry</code> (countries, on by default), plus <code>cf-region</code> and <code>cf-ipcity</code> if you enable <em>Rules → Managed Transforms → Add visitor location headers</em> in Cloudflare.</li>
+  <li>A <strong>GeoIP database file</strong> (<code>.mmdb</code>) on your server, configured in Settings → Analytics.</li>
+</ol>
+<p>Without any of these, the location columns stay empty (“Unknown”). The database file is not included in the repository, because its licence doesn't allow redistribution. Two free options:</p>
+<div class="box">
+<h4>MaxMind GeoLite2 City (free account needed)</h4>
+<ol class="steps">
+  <li>Create a free account at <a href="https://www.maxmind.com/en/geolite2/signup">maxmind.com/en/geolite2/signup</a> and sign in.</li>
+  <li>Open <strong>Download Databases</strong> and download <strong>GeoLite2 City</strong> (GZIP, the <code>.mmdb</code> format). Unpack it: you get <code>GeoLite2-City.mmdb</code> (about 60 MB). <em>GeoLite2 Country</em> (about 8 MB) works too, without regions and cities.</li>
+  <li>Upload the file to your server, outside public folders, e.g. <code>/var/www/pulsezen/storage/GeoLite2-City.mmdb</code>.</li>
+  <li>In Admin → Settings → Analytics enter the <strong>full path</strong> in <em>GeoIP database file</em> and save.</li>
+  <li>Restart the app (the file is loaded once and kept in memory).</li>
+</ol>
+<p><strong>Licence:</strong> GeoLite2 is free under the GeoLite2 End User License Agreement. You must keep it up to date (MaxMind asks you to use the latest release and delete old copies within 30 days) and show the attribution “This product includes GeoLite2 data created by MaxMind, available from <a href="https://www.maxmind.com">https://www.maxmind.com</a>” — for example in your Privacy policy or footer. Read the EULA for commercial use. For automatic updates, use MaxMind's <code>geoipupdate</code> tool with your licence key (e.g. a weekly cron job), then restart the app.</p>
+</div>
+<div class="box">
+<h4>DB-IP IP to City Lite (no account)</h4>
+<ol class="steps">
+  <li>Open <a href="https://db-ip.com/db/download/ip-to-city-lite">db-ip.com/db/download/ip-to-city-lite</a> and download the <strong>MMDB</strong> version (<code>dbip-city-lite-YYYY-MM.mmdb.gz</code>). Unpack it. (<em>IP to Country Lite</em> works too.)</li>
+  <li>Upload it to the server and enter its full path in Settings → Analytics, e.g. <code>/var/www/pulsezen/storage/dbip-city-lite.mmdb</code>. Restart the app.</li>
+  <li>DB-IP publishes a new file every month; replace the file (keep the same name) and restart.</li>
+</ol>
+<p><strong>Licence:</strong> Creative Commons Attribution 4.0. You must credit DB-IP, e.g. “IP Geolocation by <a href="https://db-ip.com">DB-IP</a>” on a page your visitors can see (Privacy policy or footer).</p>
+</div>
+<p>The path must end in <code>.mmdb</code>. A missing or broken file is logged once (<code>[pulsezen] GeoIP database not loaded …</code>), retried every 10 minutes, and never stops event collection. Locations are only added to new events; past events are not looked up again. On Docker, put the file into the storage volume. On Vercel, the headers already provide locations.</p>
+
+<h3 id="admin-system">System &amp; scheduler</h3>
+<p>The <strong>Scheduler</strong> card is the health check of your background jobs:</p>
+<table>
+  <tr><th>Item</th><th>Meaning</th></tr>
+  <tr><td>Badge</td><td><em>Running</em>: a tick finished in the last 3 minutes. <em>Stalled</em>: ticks used to run but stopped. <em>Never ran</em>: no tick yet.</td></tr>
+  <tr><td>Last run</td><td>Time and source of the last tick: <code>cron</code>, <code>worker</code>, <code>lazy</code> or <code>manual</code>.</td></tr>
+  <tr><td>Last result</td><td>Duration, and per job the number of items handled (days summarised, old events deleted, traffic alerts sent, reports sent, usage emails sent). Red = the job failed (details in the server log), orange = left for the next run. “Skipped” = another tick was running.</td></tr>
+  <tr><td>Lazy mode</td><td>Whether <em>Run background jobs on visits</em> is on.</td></tr>
+  <tr><td>Run jobs now</td><td>Runs one tick immediately (25-second budget), ignoring the jobs' own intervals, and shows the result.</td></tr>
+  <tr><td>Cron URL, cron line</td><td>The complete URL with the secret, a Copy button and a ready-made crontab line.</td></tr>
+  <tr><td>New secret</td><td>Replaces the stored secret (hidden when a valid <code>CRON_SECRET</code> is set; shown when an ignored too-short or example value is set).</td></tr>
+</table>
+<p>The other cards show the version, Node.js, database type, storage folder, demo mode and email status; <strong>Data</strong> (number of raw events, the oldest raw event, days summarised, summary rows, visitor salts — normally 2 — and alert log entries); the applied database migrations; tools to reload settings and delete expired sessions; and an <strong>Email test</strong>.</p>
+
+<!-- ───────────────────────────── Customer guide ───────────────────────────── -->
+<h2 id="customer">Customer guide</h2>
+<p>This chapter explains the customer dashboard (<code>/dashboard</code>). You can copy parts of it into your own help pages or blog. The sidebar has <em>All websites</em>, the pages of the selected website (Dashboard, Goals, Email reports, Traffic alerts, Site settings) and the workspace pages (Alert channels, API keys). The sidebar also shows the plan's <em>Pageviews this month</em> meter.</p>
+
+<h3 id="c-sites">Websites</h3>
+<p><strong>All websites</strong> lists every website with its visitors right now (last 5 minutes), today's visitors and a 7-day sparkline. Click <strong>Add website</strong>:</p>
+<table>
+  <tr><th>Field</th><th>Details</th></tr>
+  <tr><td>Domain</td><td>Without <code>https://</code> and <code>www</code>, e.g. <code>example.com</code>. Subdomains (<code>shop.example.com</code>, <code>blog.example.com</code>) are accepted automatically. Use <code>localhost</code> for local testing.</td></tr>
+  <tr><td>Name</td><td>Shown in the dashboard, alerts and reports. Defaults to the domain.</td></tr>
+  <tr><td>Time zone</td><td>Days, charts and reports follow this time zone. Defaults to the browser's time zone. Changing it later rebuilds the daily summaries of the days that still have detailed data (see <a href="#retention">Data retention</a>).</td></tr>
+</table>
+<p>The next page shows the snippet and the <a href="#t-platforms">platform guides</a> and waits for the first visit. <strong>Site settings</strong> has:</p>
+<ul>
+  <li><strong>Tracking snippet</strong> and the site key, with <em>Receiving data since …</em> once data arrives.</li>
+  <li><strong>General</strong> – name, domain (changing it keeps all statistics; update the domain before moving the website), time zone.</li>
+  <li><strong>What gets counted</strong> – <em>Other domains that may send data</em> (one per line, e.g. a staging site or a second domain, up to 20), <em>Pages to ignore</em> (up to 50 path patterns such as <code>/admin/*</code>), <em>IP addresses to ignore</em> (up to 50 addresses or CIDR ranges such as <code>203.0.113.0/24</code>, e.g. your office), <em>Count visits from localhost</em>, <em>Hash routing</em>. Changes apply to new events immediately.</li>
+  <li><strong>Public dashboard</strong> – see <a href="#c-share">Shared dashboards</a>.</li>
+  <li><strong>Danger zone</strong> – <em>Reset data</em> deletes every visit, event and daily summary of the website but keeps its settings, goals and snippet. <em>Delete website</em> (type the domain to confirm) deletes the website, its statistics, goals, reports and traffic alerts for good.</li>
+</ul>
+
+<h3 id="c-dashboard">The dashboard</h3>
+<p>The top shows the number of <strong>current visitors</strong> (refreshed every 15 seconds) and six key numbers for the selected period, each with the change compared with the previous period of the same length: <strong>visitors, visits, pageviews, views per visit, bounce rate</strong> and <strong>visit duration</strong> (definitions in <a href="#counting">How visitors are counted</a>). Click a number to show it in the chart. The chart can show the previous period as a second line (<em>Compare</em>), can be read as a table for accessibility, and exported as CSV.</p>
+<p>Below are five cards, each with tabs:</p>
+<table>
+  <tr><th>Card</th><th>Tabs</th></tr>
+  <tr><td>Pages</td><td>Top pages, Entry pages, Exit pages, Hostnames</td></tr>
+  <tr><td>Sources</td><td>Channels, Sources, AI assistants, Referrers, UTM (medium, source, campaign)</td></tr>
+  <tr><td>Locations</td><td>Countries, Regions, Cities</td></tr>
+  <tr><td>Devices</td><td>Browsers, Operating systems, Devices (desktop, mobile, tablet), Screen sizes, Languages</td></tr>
+  <tr><td>Goals and events</td><td>Goals (unique conversions, total conversions, conversion rate, revenue), Custom events (unique visitors, total events, revenue; click an event to see its <a href="#c-props">properties</a>)</td></tr>
+</table>
+<p><strong>Details</strong> opens the full list of a tab with visitors, visits, pageviews, bounce rate and visit duration per row, a search box, pages of 50 rows and <strong>Export CSV</strong> (up to 10,000 rows, UTF-8 for Excel). Screen sizes are grouped: &lt;576, 576–767, 768–991, 992–1279, 1280–1919 and 1920+ pixels wide. Languages are the primary language of the browser (<code>en</code>, <code>de</code> …).</p>
+
+<h3 id="c-filters">Periods and filters</h3>
+<p><strong>Periods:</strong> Today and Yesterday (hourly chart), Last 7 days, Last 30 days (default), This month, Last month (daily chart), Last 12 months and All time (monthly chart), and a custom range (hourly for one day, daily up to 92 days, monthly beyond; at most 10 years). All dates follow the website's time zone.</p>
+<p><strong>Filters:</strong> click any row in a card (a page, a source, a country …) to filter the whole dashboard by it (in the <em>Custom events</em> tab, use the filter icon next to the event: clicking the event opens its properties). Or click <strong>Filter</strong> and choose a dimension, a condition (<em>is</em>, <em>is not</em>, <em>contains</em>) and a value. Up to 10 filters can be combined; each one appears as a chip that can be removed. Countries use the two-letter code (<code>DE</code>, <code>US</code>). The filters are part of the address, so a filtered view can be bookmarked or shared with a teammate who has access.</p>
+<ul>
+  <li>Filters on <em>page</em>, <em>hostname</em>, <em>event</em> and <em>goal</em> select single events: “page is /pricing” shows the pageviews of /pricing and the visitors who saw it.</li>
+  <li>All other filters select whole visits by their first event: “source is Google” shows everything visitors from Google did.</li>
+  <li><em>contains</em> is not case-sensitive. Event names are compared case-sensitively with <em>is</em> / <em>is not</em>.</li>
+</ul>
+<p>On old days that only exist as daily summaries, combined filters can't be applied, and a single filter applies to the totals and the chart but not to lists by other dimensions; see <a href="#retention">Data retention</a>.</p>
+
+<h3 id="c-props">Event properties</h3>
+<p>In the <em>Goals and events</em> card, open the <strong>Custom events</strong> tab and click an event (e.g. <em>Outbound Link</em>, <em>File Download</em> or <em>Purchase</em>). The card then shows the <strong>properties</strong> sent with that event (e.g. <code>url</code>, <code>plan</code>) as small tabs, and for the selected property its values with unique visitors, total events and revenue: which links were clicked, which files were downloaded, which plans were bought. <em>All events</em> goes back. The period and filters of the dashboard apply. Shared dashboards have the same view.</p>
+<ul>
+  <li>Properties are not part of the daily summaries: only days that still have raw events are counted (a note says so when the range reaches further back).</li>
+  <li>The list of property names is counted from the latest 100,000 matching events; the values of a property are always counted exactly.</li>
+  <li><code>$currency</code> is the currency sent with revenue (see <a href="#t-events">Custom events</a>).</li>
+</ul>
+<p>The same lists are available in the <a href="#c-api">Stats API</a> (<code>dimension=event_prop</code>).</p>
+
+<h3 id="c-goals">Goals</h3>
+<p>Goals count the visitors who sign up, buy or reach an important page. Open <strong>Goals</strong> and add up to 50 goals per website:</p>
+<ul>
+  <li><strong>Custom event</strong> – the event name exactly as sent by the website, e.g. <code>Signup</code>, <code>Purchase</code>, <code>Outbound Link</code>, <code>File Download</code> or <code>404</code>. Names are matched exactly, including capitalisation, on MySQL and SQLite alike.</li>
+  <li><strong>Page visit</strong> – a path such as <code>/thank-you</code>; <code>*</code> is a wildcard: <code>/blog/*</code> matches every blog post.</li>
+  <li><strong>Display name</strong> (optional) – shown in the dashboard and reports.</li>
+</ul>
+<p>The Goals page shows the conversions of the last 30 days and how to send events. In the dashboard, the <em>Goals</em> tab shows for each goal the unique conversions (visitors), total conversions, the <strong>conversion rate</strong> (converting visitors ÷ all visitors) and the revenue. Goals work on past data too: adding a goal later shows its conversions for the whole history. Deleting a goal keeps the events.</p>
+
+<h3 id="c-reports">Email reports</h3>
+<p><strong>Email reports → Add email report</strong>: choose <em>Weekly</em> (every Monday, for the previous Monday–Sunday) or <em>Monthly</em> (on the 1st, for the previous month), and up to 10 recipients separated by commas. Up to 4 reports per website. Reports go out in the website's time zone, once the last day of the period has been summarised (a few minutes after midnight), and are written in English.</p>
+<p>A report contains visitors, pageviews, bounce rate and visit duration with the change compared with the period before, the top 5 pages, sources and countries, and the number of visitors from AI assistants. Unless the plan removes branding, it ends with your <a href="#admin-analytics">branding line</a>. <strong>Send a test report now</strong> sends the last complete period immediately (3 tests per 5 minutes). Reports need SMTP on the platform; without it the page shows a notice. If a report can't be sent (SMTP error), it is retried every 10 minutes for a day.</p>
+
+<h3 id="c-alerts">Traffic alerts</h3>
+<p><strong>Traffic alerts → Add traffic alert</strong>: pick the type, the threshold and one or more <a href="#c-channels">alert channels</a>. Up to 10 alerts per website.</p>
+<table>
+  <tr><th>Type</th><th>Threshold</th><th>Fires when</th></tr>
+  <tr><td><strong>Traffic spike</strong></td><td>2–100 (× the usual hourly visitors)</td><td>The last 60 minutes bring more than <em>threshold</em> × the average hourly visitors of the previous 7 days, and at least 20 visitors. Needs at least 24 hours of history. Example: a post going viral.</td></tr>
+  <tr><td><strong>Traffic drop</strong></td><td>1–99 (% of the usual daily visitors)</td><td>The last 24 hours bring fewer than <em>threshold</em> % of the average daily visitors of the last 7 finished days. Starts once the website has 7 days of data and at least 10 visitors a day.</td></tr>
+  <tr><td><strong>No data</strong></td><td>1–720 hours</td><td>No pageview or event at all for that many hours: the tracking script may have been removed or broken. One alert per silence; it re-arms when data comes back. Never fires for a website that has never received data.</td></tr>
+</table>
+<p>Alerts are checked every 5 minutes by the <a href="#scheduling">scheduler</a>. After an alert fires, it stays quiet for 6 hours. Alerts can be paused and resumed. The page shows the <strong>alert history</strong>: the last 50 deliveries with date, alert, channel and result (<em>Delivered</em> or <em>Failed</em> with the error). Test messages sent with <em>Send test</em> on the Alert channels page belong to no website and are not listed there; their result is shown right after sending.</p>
+
+<h3 id="c-channels">Alert channels</h3>
+<p>Open <strong>Alert channels → Add alert channel</strong>, pick a type, give the channel a name (e.g. “Marketing team”) and fill in the fields. Then select it in a website's traffic alerts. Switch a channel off to pause its alerts without deleting it. <strong>Send test</strong> sends a sample alert right away (6 per minute) and shows the exact error if delivery fails. The list shows which websites' alerts use each channel.</p>
+<p>Channels receive these events: <strong>Traffic spike</strong>, <strong>Traffic drop</strong>, <strong>No data</strong> and <strong>Test</strong>. Alerts to all selected channels are sent in parallel with an 8-second timeout each, without retries; every alert delivery is listed in the website's alert history. Alert texts are in English. (Usage warnings at 80 % / 100 % of the plan go by email to the account owner, not to channels.)</p>
+
+<div class="box">
+<h4>Email</h4>
+<p>Up to 10 addresses, separated by commas. Subjects look like <code>[Traffic spike] example.com</code>, <code>[Traffic drop] example.com</code>, <code>[No data] example.com</code>. The message contains the summary, the numbers behind the alert and a link to the dashboard.</p>
+<p><strong>Requires SMTP</strong> in Admin → Settings → Email. Without it, sending fails with “Email is not configured on this platform”.</p>
+</div>
+
+<div class="box">
+<h4>Slack</h4>
+<ol class="steps">
+  <li>Go to <a href="https://api.slack.com/apps">api.slack.com/apps</a> → <strong>Create New App</strong> → <em>From scratch</em>. Name it (e.g. “Traffic alerts”) and pick your workspace.</li>
+  <li>Open <strong>Incoming Webhooks</strong> and switch <em>Activate Incoming Webhooks</em> on.</li>
+  <li>Click <strong>Add New Webhook to Workspace</strong>, choose the channel and click <em>Allow</em>.</li>
+  <li>Copy the URL (<code>https://hooks.slack.com/services/T…/B…/…</code>), paste it as <em>Incoming webhook URL</em> and click <em>Send test</em>.</li>
+</ol>
+</div>
+
+<div class="box">
+<h4>Discord</h4>
+<ol class="steps">
+  <li>In Discord open the channel's <strong>Edit Channel</strong> (gear icon) → <strong>Integrations</strong> → <strong>Webhooks</strong> → <strong>New Webhook</strong>. You need the <em>Manage Webhooks</em> permission.</li>
+  <li>Click the new webhook, then <strong>Copy Webhook URL</strong> (<code>https://discord.com/api/webhooks/…</code>).</li>
+  <li>Paste it in Pulsezen and click <em>Send test</em>.</li>
+</ol>
+<p>Alerts are posted as an embed in the event colour, under your platform's name.</p>
+</div>
+
+<div class="box">
+<h4>Microsoft Teams</h4>
+<p>Microsoft is retiring the old “Incoming Webhook” connectors (Office 365 connectors). Use <strong>Workflows</strong>:</p>
+<ol class="steps">
+  <li>In Teams, open the channel, click <strong>…</strong> (More options) → <strong>Workflows</strong>.</li>
+  <li>Choose the template <strong>“Post to a channel when a webhook request is received”</strong>, give it a name, check the team and channel, and click <em>Add workflow</em>.</li>
+  <li>Copy the URL that is shown (it contains <code>logic.azure.com</code>, <code>powerplatform.com</code> or <code>powerautomate.com</code>), paste it in Pulsezen and click <em>Send test</em>.</li>
+</ol>
+<p>Workflow URLs receive an Adaptive Card with an <em>Open dashboard</em> button. Other URLs (a legacy connector, if your tenant still has one) receive the classic MessageCard format.</p>
+</div>
+
+<div class="box">
+<h4>Telegram</h4>
+<ol class="steps">
+  <li>In Telegram, open <strong>@BotFather</strong>, send <code>/newbot</code>, choose a name and a username ending in <code>bot</code>. Copy the <strong>bot token</strong> (looks like <code>123456789:AA…</code>).</li>
+  <li>Start a chat with your bot (press <em>Start</em>), or add the bot to the group that should get alerts. For a channel, add the bot as an administrator.</li>
+  <li>Send any message in that chat (in a group, e.g. <code>/start@yourbot</code>).</li>
+  <li>Open <code>https://api.telegram.org/bot&lt;token&gt;/getUpdates</code> in a browser and find <code>"chat":{"id":…}</code>. Private chats have a positive number, groups a negative number, supergroups and channels start with <code>-100</code>. Public channels can also use <code>@channelname</code>.</li>
+  <li>Paste the token and the chat ID and click <em>Send test</em>.</li>
+</ol>
+</div>
+
+<div class="box">
+<h4>Webhook</h4>
+<p>Pulsezen sends a <code>POST</code> with a JSON body to your URL for every alert. Optionally enter a <strong>Signing secret</strong> (click <em>Generate</em>): every request then carries an HMAC-SHA256 signature. Use it to connect Zapier (“Catch Hook”), Make (“Custom webhook”), n8n, or your own code. Any port is allowed, but private and local addresses (localhost, 10.x, 192.168.x …) are refused unless the server sets <code>ALLOW_PRIVATE_WEBHOOKS=1</code>. Redirects are not followed.</p>
+</div>
+
+<h3 id="c-webhook">Webhook payload and signature</h3>
+<pre><code>POST https://your-endpoint.example.com/pulsezen
+Content-Type: application/json
+User-Agent: Pulsezen-Webhook/1.0
+X-Pulsezen-Event: traffic_spike
+X-Pulsezen-Delivery: 0b6f8c1e-2d7a-4f53-9e1a-6c2f1d8b9a40
+X-Pulsezen-Signature: sha256=5d1c0e…
+
+{
+  "event": "traffic_spike",
+  "site": { "id": 3, "name": "Acme Shop", "domain": "shop.example.com" },
+  "message": "Traffic spike on shop.example.com: 412 visitors in the last hour (6.2× the usual 66.5 per hour).",
+  "data": { "visitors": 412, "baseline": 66.5, "threshold": 3, "ratio": 6.2 },
+  "url": "https://analytics.example.com/dashboard/sites/3",
+  "sentAt": "2026-10-17T09:30:12.512Z"
+}</code></pre>
+<table>
+  <tr><th>Field</th><th>Meaning</th></tr>
+  <tr><td><code>event</code></td><td><code>traffic_spike</code>, <code>traffic_drop</code>, <code>traffic_silence</code> or <code>test</code>.</td></tr>
+  <tr><td><code>site</code></td><td><code>id</code>, <code>name</code>, <code>domain</code> of the website; <code>null</code> for a test.</td></tr>
+  <tr><td><code>message</code></td><td>A one-line summary in English.</td></tr>
+  <tr><td><code>data</code></td><td>The numbers behind the alert. Spike: <code>visitors</code> (last hour), <code>baseline</code> (usual per hour), <code>threshold</code>, <code>ratio</code>. Drop: <code>visitors</code> (last 24 hours), <code>baseline</code> (usual per day), <code>threshold</code> (%), <code>percent</code>. No data: <code>hours</code> (threshold), <code>silentHours</code>, <code>lastEventAt</code> (ISO, UTC).</td></tr>
+  <tr><td><code>url</code>, <code>sentAt</code></td><td>Link to the website's dashboard; time of sending (ISO, UTC).</td></tr>
+</table>
+<p>Reply with any 2xx status within 8 seconds. Do slow work after replying. <code>X-Pulsezen-Delivery</code> is a unique id per request.</p>
+<h4>Verifying the signature</h4>
+<p><code>X-Pulsezen-Signature</code> is only sent when the channel has a signing secret. It is <code>sha256=</code> followed by the hex HMAC-SHA256 of the <strong>raw request body</strong>, keyed with the secret. Always compute it over the raw bytes, before parsing the JSON, and compare in constant time.</p>
+<p>Node.js (Express):</p>
+<pre><code>import crypto from "node:crypto";
+import express from "express";
+
+const SECRET = process.env.PULSEZEN_SECRET; // the channel's signing secret
+const app = express();
+
+app.post("/pulsezen", express.raw({ type: "application/json" }), (req, res) =&gt; {
+  const expected = "sha256=" + crypto.createHmac("sha256", SECRET).update(req.body).digest("hex");
+  const given = req.get("X-Pulsezen-Signature") || "";
+  const valid = given.length === expected.length &amp;&amp;
+    crypto.timingSafeEqual(Buffer.from(given), Buffer.from(expected));
+  if (!valid) return res.status(401).send("Bad signature");
+
+  const alert = JSON.parse(req.body.toString("utf8"));
+  console.log(alert.event, alert.site?.domain, alert.message);
+  res.sendStatus(204);
+});
+
+app.listen(3000);</code></pre>
+<p>PHP:</p>
+<pre><code>&lt;?php
+$secret = 'YOUR-SIGNING-SECRET';
+$raw = file_get_contents('php://input');
+$expected = 'sha256=' . hash_hmac('sha256', $raw, $secret);
+$given = $_SERVER['HTTP_X_PULSEZEN_SIGNATURE'] ?? '';
+
+if (!hash_equals($expected, $given)) {
+    http_response_code(401);
+    exit('Bad signature');
+}
+
+$alert = json_decode($raw, true);
+// $alert['event'] is "traffic_spike", "traffic_drop", "traffic_silence" or "test"
+http_response_code(204);</code></pre>
+
+<h3 id="c-share">Shared dashboards and embedding</h3>
+<p>In <strong>Site settings → Public dashboard</strong> click <em>Create a public link</em>. Anyone with the secret link <code>https://analytics.example.com/share/&lt;token&gt;</code> can see the website's statistics — the same dashboard with all cards, filters, periods, details and CSV export, and the current visitors — but not its settings. Shared dashboards are never indexed by search engines.</p>
+<ul>
+  <li><strong>New link</strong> replaces the token; the old link stops working. <strong>Turn off</strong> disables sharing.</li>
+  <li><strong>Password</strong> (optional, at least 6 characters): visitors type it once per browser; access lasts 7 days. Changing the password signs everyone out. 10 wrong attempts per 10 minutes per IP address are allowed.</li>
+  <li>Unless the owner's plan removes branding, the shared dashboard shows the <a href="#admin-analytics">branding line</a>.</li>
+</ul>
+<p><strong>Embed</strong> the live dashboard in another website (a client portal, a Notion-like page, a WordPress page) with the snippet shown in the settings:</p>
+<pre><code>&lt;iframe src="https://analytics.example.com/share/TOKEN?embed=1" style="width:100%;height:1600px;border:0" loading="lazy" title="Analytics dashboard"&gt;&lt;/iframe&gt;</code></pre>
+<p><code>?embed=1</code> (or <code>/share/TOKEN/embed</code>) hides the header. Shared dashboards may be framed by any website; every other page of the platform refuses to be framed.</p>
+<div class="note">Password-protected dashboards inside an iframe need a third-party cookie (the platform sends it as <code>SameSite=None; Secure</code> over HTTPS). Safari and some privacy settings block third-party cookies, so the password form may keep coming back there. For embeds, prefer a dashboard without a password (the link itself is secret).</div>
+
+<h3 id="c-api">API keys and the Stats API</h3>
+<p>Plans with <em>Stats API</em> can read statistics over a REST API, e.g. for client reports, spreadsheets or their own apps. Open <strong>API keys</strong>, enter a name and click <em>Create key</em>. The key (starting with <code>pz_</code>) is shown <strong>once</strong>; only a hash is stored. A key can read all websites of the account. Up to 20 keys; <em>Revoke</em> deletes a key immediately; <em>Last used</em> shows when it was used.</p>
+<p>Send the key in the <code>Authorization</code> header. Responses are JSON. Call the API from a server or a script, not from browser JavaScript on another website (that would expose the key, and cross-origin browser calls are not allowed).</p>
+<pre><code>curl -H "Authorization: Bearer pz_YOUR_KEY" "https://analytics.example.com/api/v1/sites"</code></pre>
+<h4>Endpoints</h4>
+<table>
+  <tr><th>Endpoint</th><th>Returns</th></tr>
+  <tr><td><code>GET /api/v1/sites</code></td><td>The account's websites: <code>id</code>, <code>name</code>, <code>domain</code>, <code>timezone</code>, <code>created_at</code>, <code>verified</code>.</td></tr>
+  <tr><td><code>GET /api/v1/stats/aggregate</code></td><td>Totals for the period. Add <code>compare=1</code> for the previous period and the change in %.</td></tr>
+  <tr><td><code>GET /api/v1/stats/timeseries</code></td><td>The numbers per hour, day or month (<code>interval=hour|day|month</code>; hour for up to 7 days, day for up to 400 days). Default: the period's own interval.</td></tr>
+  <tr><td><code>GET /api/v1/stats/breakdown</code></td><td>Top values of a dimension (<code>dimension=</code>), with <code>limit</code> (1–100, default 10), <code>page</code> (default 1) and <code>search</code> (contains). With <code>dimension=event_prop&amp;event=NAME</code>: the property names sent with that custom event; add <code>prop=KEY</code> for the values of one property (see below).</td></tr>
+</table>
+<h4>Common parameters</h4>
+<table>
+  <tr><th>Parameter</th><th>Values</th></tr>
+  <tr><td><code>site_id</code></td><td>Required for the stats endpoints. The website's id from <code>/api/v1/sites</code>.</td></tr>
+  <tr><td><code>period</code></td><td><code>today</code>, <code>yesterday</code>, <code>7d</code>, <code>30d</code> (default), <code>month</code>, <code>last_month</code>, <code>12m</code>, <code>all</code>, <code>custom</code> (with <code>from</code> and <code>to</code> as <code>YYYY-MM-DD</code>). Dates follow the website's time zone.</td></tr>
+  <tr><td><code>f</code></td><td>A filter, repeatable (up to 10): <code>f=country:is:DE&amp;f=page:contains:/blog</code>. Operators <code>is</code>, <code>is_not</code>, <code>contains</code>. Also accepted: <code>filters=country:is:DE;source:is:Google</code>. URL-encode values.</td></tr>
+</table>
+<p><strong>Dimensions</strong> (for <code>dimension=</code> and filters): <code>page</code>, <code>entry_page</code>, <code>exit_page</code>, <code>hostname</code>, <code>channel</code>, <code>source</code>, <code>referrer</code>, <code>utm_source</code>, <code>utm_medium</code>, <code>utm_campaign</code>, <code>utm_term</code>, <code>utm_content</code>, <code>country</code>, <code>region</code>, <code>city</code>, <code>browser</code>, <code>os</code>, <code>device</code>, <code>screen</code>, <code>lang</code>, <code>event</code>, <code>goal</code> (filter by the goal's display name). Channel values: <code>direct</code>, <code>search</code>, <code>social</code>, <code>ai</code>, <code>email</code>, <code>paid</code>, <code>referral</code>. Device values: <code>desktop</code>, <code>mobile</code>, <code>tablet</code>.</p>
+<h4>Examples</h4>
+<pre><code>curl -H "Authorization: Bearer pz_YOUR_KEY" \
+  "https://analytics.example.com/api/v1/stats/aggregate?site_id=3&amp;period=30d&amp;compare=1"
+
+{
+  "site_id": 3, "timezone": "Europe/Berlin", "period": "30d",
+  "from": "2026-09-18", "to": "2026-10-17", "filters": [], "approximate": false,
+  "results": { "visitors": 18240, "visits": 22105, "pageviews": 51320, "viewsPerVisit": 2.32,
+               "bounceRate": 41, "visitDuration": 96, "events": 1830, "revenueCents": 249900 },
+  "previous": { "from": "2026-08-19", "to": "2026-09-17", "results": { "visitors": 16110, … } },
+  "change": { "visitors": 13, "visits": 11, "pageviews": 9, "viewsPerVisit": -2,
+              "bounceRate": -3, "visitDuration": 5, "events": 20, "revenueCents": 31 }
+}</code></pre>
+<pre><code>curl -H "Authorization: Bearer pz_YOUR_KEY" \
+  "https://analytics.example.com/api/v1/stats/timeseries?site_id=3&amp;period=7d&amp;interval=day"
+
+{ …, "interval": "day",
+  "results": [ { "date": "2026-10-11", "visitors": 590, "pageviews": 1702, "visits": 731,
+                 "viewsPerVisit": 2.33, "bounceRate": 40, "visitDuration": 91 }, … ] }</code></pre>
+<pre><code>curl -H "Authorization: Bearer pz_YOUR_KEY" \
+  "https://analytics.example.com/api/v1/stats/breakdown?site_id=3&amp;period=month&amp;dimension=source&amp;limit=5&amp;f=country:is:US"
+
+{ …, "dimension": "source", "page": 1, "limit": 5, "approximate": false,
+  "results": [ { "value": "Google", "visitors": 2210, "visits": 2630, "pageviews": 6120,
+                 "bounceRate": 38, "visitDuration": 104 }, … ] }</code></pre>
+<p><strong>Event properties</strong> (<code>dimension=event_prop</code>): <code>event</code> is the custom event name (case-sensitive) and is required; without <code>prop</code> the results are the property names, with <code>prop</code> the values of that property. Each row has <code>value</code>, <code>visitors</code>, <code>events</code> and <code>revenueCents</code>. The filters and <code>search</code> apply. Properties are not summarised, so only days with raw events count (<code>approximate: true</code> when the range reaches days that only exist as summaries); property names are counted from the latest 100,000 matching events (<code>truncated: true</code> when there were more).</p>
+<pre><code>curl -H "Authorization: Bearer pz_YOUR_KEY" \
+  "https://analytics.example.com/api/v1/stats/breakdown?site_id=3&amp;period=30d&amp;dimension=event_prop&amp;event=File%20Download&amp;prop=url"
+
+{ …, "dimension": "event_prop", "event": "File Download", "prop": "url", "page": 1, "limit": 10,
+  "approximate": false, "truncated": false,
+  "results": [ { "value": "https://example.com/files/price-list.pdf", "visitors": 132, "pageviews": 0,
+                 "events": 151, "revenueCents": 0 }, … ] }</code></pre>
+<p>Units: <code>bounceRate</code> in % (0–100), <code>visitDuration</code> in seconds, <code>revenueCents</code> in cents of the platform currency. In <code>change</code>, values are % changes, except <code>bounceRate</code> (percentage points); <code>null</code> when there is nothing to compare with. Page and hostname breakdowns return <code>visitors</code> and <code>pageviews</code>; event breakdowns return <code>visitors</code>, <code>events</code> and <code>revenueCents</code>; goal breakdowns also return <code>conversionRate</code>, <code>goalId</code>, <code>type</code> and <code>pattern</code>. <code>approximate: true</code> means old days that only exist as summaries were left out because of the filters (aggregate: two or more filters, or <em>is not</em> / <em>contains</em>; breakdowns also with a single filter on another dimension; see <a href="#retention">Data retention</a>).</p>
+<h4>Errors and limits</h4>
+<table>
+  <tr><th>Status</th><th>Meaning</th></tr>
+  <tr><td><code>401</code></td><td>Missing or invalid key.</td></tr>
+  <tr><td><code>403</code></td><td>The account is not active, or its plan has no Stats API.</td></tr>
+  <tr><td><code>404</code></td><td>Unknown endpoint, or <code>site_id</code> is not one of the account's websites.</td></tr>
+  <tr><td><code>400</code></td><td>Invalid parameters (e.g. <code>period=custom</code> without dates, an unknown dimension, an interval too small for the range).</td></tr>
+  <tr><td><code>429</code></td><td>More than <strong>600 requests per minute</strong> per key. Wait a minute (<code>Retry-After: 60</code>).</td></tr>
+</table>
+<p>Errors look like <code>{"error":"Invalid API key."}</code>. Responses are never cached (<code>Cache-Control: no-store</code>).</p>
+
+<!-- ───────────────────────────── Payments ───────────────────────────── -->
+<h2 id="payments">Payment gateways</h2>
+<p>Choose your <strong>currency</strong> in Settings → Payments first; it must be supported by every gateway you enable. The same currency is used to show revenue in dashboards. Prices are entered per plan. Your customers see the enabled methods at checkout.</p>
+
+<h3 id="pay-stripe">Stripe (cards, Apple Pay, Google Pay – automatic renewal)</h3>
+<ol class="steps">
+  <li>In the Stripe Dashboard open <strong>Developers → API keys</strong> and copy the <em>Secret key</em> (<code>sk_live_…</code>, or <code>sk_test_…</code> for testing).</li>
+  <li>Open <strong>Developers → Webhooks → Add endpoint</strong>:
+    <ul>
+      <li>URL: <code>https://analytics.example.com/api/payments/stripe/webhook</code></li>
+      <li>Events: <code>invoice.paid</code>, <code>checkout.session.completed</code>, <code>customer.subscription.deleted</code></li>
+    </ul>
+    Copy the <em>Signing secret</em> (<code>whsec_…</code>).</li>
+  <li>In Pulsezen open Settings → Payments, switch on Stripe, paste both keys and save.</li>
+</ol>
+<p>You don't have to create products or prices in Stripe; they are sent with each checkout from your plans. Customers can cancel automatic renewal from their account page and keep access until the end of the paid period.</p>
+
+<h3 id="pay-paypal">PayPal</h3>
+<ol class="steps">
+  <li>Go to <a href="https://developer.paypal.com/">developer.paypal.com</a> → <strong>Apps &amp; Credentials</strong>, create an app and copy the <em>Client ID</em> and <em>Secret</em> (Sandbox for testing, Live for real payments).</li>
+  <li>In Settings → Payments switch on PayPal, select the matching mode and paste both values.</li>
+</ol>
+<p>PayPal payments are one-off: a monthly or yearly purchase adds that period to the customer's plan.</p>
+
+<h3 id="pay-razorpay">Razorpay (India: UPI, cards, netbanking)</h3>
+<ol class="steps">
+  <li>In the Razorpay Dashboard open <strong>Account &amp; Settings → API Keys</strong> and generate a key.</li>
+  <li>Paste the <em>Key ID</em> and <em>Key secret</em> in Settings → Payments and switch Razorpay on. Set the currency to INR.</li>
+</ol>
+<p>Customers pay on a Razorpay payment page; the signature of the return request is verified before the plan is activated.</p>
+
+<h3 id="pay-offline">Bank transfer</h3>
+<p>Switch on <em>Bank transfer</em> and write your bank details in <em>Payment instructions</em>. Customers submit their transaction reference; you approve it in Admin → Payments.</p>
+
+<!-- ───────────────────────────── Email ───────────────────────────── -->
+<h2 id="email">Email (SMTP)</h2>
+<p>Email is <strong>required</strong> for email reports, email alert channels and the 80 % / 100 % usage warnings. It is also used for password reset links and contact-form messages. Without SMTP, reports and usage emails wait (they are sent once SMTP works), email channels fail with a clear error, and the Email reports page shows a notice to customers.</p>
+<p>Enter your SMTP details in Settings → Email and switch on <em>Send emails</em>. Any provider works: your hosting mailbox, Gmail with an app password, Brevo, Mailgun, Amazon SES, Postmark… Use port 587 with SSL off (STARTTLS), or port 465 with SSL on. Send a test from Admin → System.</p>
+<p>Reports go out in bursts (every Monday and on the 1st of each month). Use a transactional email provider rather than a personal mailbox, a sender address on your own domain, and set up SPF and DKIM for it so reports don't land in spam.</p>
+
+<!-- ───────────────────────────── i18n ───────────────────────────── -->
+<h2 id="i18n">Languages &amp; RTL</h2>
+<ol class="steps">
+  <li>Open <strong>Admin → Languages</strong> and add a language. Pick one from the list (the code, names and text direction are filled in) or enter your own, e.g. <code>pt-BR</code>.</li>
+  <li>Click <strong>Translate</strong>. Texts are grouped into <em>Interface</em> (the public site, sign-in pages, checkout, the customer dashboard and shared dashboards) and <em>Site texts</em> (tagline, headline, footer and SEO texts from Settings). Search, show untranslated texts only, and save page by page.</li>
+  <li>Switch the language to <strong>Active</strong>. When two or more languages are active, visitors get a language switcher in the header. Their choice is remembered in a cookie.</li>
+  <li>Choose the <strong>default language</strong> for visitors who haven't picked one.</li>
+</ol>
+<p>Anything you leave empty falls back to English, so you can translate step by step. To translate offline (or with a translation service), click <strong>Download template</strong>: you get a JSON file with every text. Translate the values, keep the keys, and upload the file with <strong>Import</strong>. <strong>Export</strong> downloads the translations you have so far. You can also change the English wording itself: open English and enter your own text.</p>
+<p>Right-to-left languages (Arabic, Hebrew, Persian, Urdu) flip the public site, the dashboard and shared dashboards automatically. The admin panel stays in English.</p>
+<ul>
+  <li><strong>Data values</strong> are shown as recorded: page paths, source names (“Google”, “ChatGPT”), browser and OS names. Country names are shown in the visitor's language by the browser.</li>
+  <li><strong>Email reports</strong>, <strong>alerts</strong> (email, Slack, Discord, Teams, Telegram, webhook) and <strong>usage emails</strong> are in English.</li>
+  <li>The tracking script has no texts.</li>
+</ul>
+
+<h3 id="i18n-packs">Bundled language packs: Arabic and Hindi</h3>
+<p>The repository includes two ready-made translations of all 964 interface texts:</p>
+<table>
+  <tr><th>File</th><th>Language</th><th>Direction</th></tr>
+  <tr><td><code>app/languages/ar.json</code></td><td>Arabic (العربية)</td><td>Right-to-left</td></tr>
+  <tr><td><code>app/languages/hi.json</code></td><td>Hindi (हिन्दी)</td><td>Left-to-right</td></tr>
+</table>
+<ol class="steps">
+  <li>Open <strong>Admin → Languages</strong> and add the language (pick <em>Arabic</em> or <em>Hindi</em> from the list, so the code and the text direction are filled in).</li>
+  <li>Click <strong>Translate</strong> next to it, choose the JSON file under <strong>Import</strong> and click <strong>Import</strong>. Existing translations with the same keys are replaced.</li>
+  <li>Switch the language to <strong>Active</strong>.</li>
+</ol>
+<p>The packs cover the interface only. The texts you enter in Settings (tagline, home page headline, footer, SEO texts) are listed under <em>Site texts</em> on the same Translate page; translate them there. On demo sites seeded with <code>DEMO_SEED=true</code> both packs (and translated default site texts) are installed and activated automatically (see <a href="#demo">Demo mode</a>).</p>
+<div class="warn">The packs were prepared with translation software and checked for completeness and placeholders, not by native speakers. Before you offer them to customers, have a native speaker review them (Translate page → search or <em>Export</em>, correct, <em>Import</em>). Wording that is fine in one country can feel unusual in another.</div>
+
+<!-- ───────────────────────────── SEO ───────────────────────────── -->
+<h2 id="seo">SEO</h2>
+<ul>
+  <li>The home page, pricing page, blog and content pages have titles, descriptions and Open Graph tags. Set them in Settings → SEO.</li>
+  <li><code>/sitemap.xml</code> and <code>/robots.txt</code> are generated automatically. Submit the sitemap in Google Search Console. Set the <strong>Site URL</strong> so canonical URLs and the sitemap use your domain.</li>
+  <li>Blog posts get article structured data (BlogPosting), Open Graph tags and sitemap entries. Starter posts about privacy-friendly analytics are included; edit them to your brand.</li>
+  <li>Shared dashboards are always <code>noindex</code>, so customers' statistics never appear in search results. Admin, account, dashboard, checkout, shared dashboard (<code>/share/</code>) and API addresses are blocked in robots.txt.</li>
+  <li>With <em>Track this website with Pulsezen</em> your own marketing pages are counted with your own product, without cookies, so your public site needs no extra analytics script.</li>
+</ul>
+
+<!-- ───────────────────────────── Privacy ───────────────────────────── -->
+<h2 id="privacy">Privacy</h2>
+<p>Pulsezen is <strong>designed for privacy</strong>: no cookies, no persistent identifiers, no IP addresses in the database, and data stays on your own server. That is a strong selling point. But privacy law differs by country and changes over time, so please read this chapter carefully.</p>
+<div class="warn"><p><strong>Not legal advice.</strong> Many data protection authorities treat cookieless, anonymous analytics like this as low-risk, and many websites use it without a consent banner. Some authorities may still consider the short-lived processing of IP addresses (for the daily hash and the location lookup) as processing of personal data. Check the law where you and your customers operate, and ask a lawyer if in doubt. <strong>You</strong> are responsible for your platform (your own Privacy policy, terms and any data processing agreement with customers); <strong>your customers</strong> are responsible for informing their own visitors, for example in their privacy policy.</p></div>
+<h3>What is stored for each pageview or event</h3>
+<ul>
+  <li>Time, website, event name, page path (without the query string; the hash only for hash routes) and hostname.</li>
+  <li>The referrer's hostname and path (without its query string), the derived source and channel, and the UTM parameters.</li>
+  <li>Country, region and city (looked up from the IP address, which is then discarded).</li>
+  <li>Browser name and major version, operating system, device type (desktop, mobile, tablet), a screen-width group and the primary browser language.</li>
+  <li>The anonymous daily visitor id (a hash, see <a href="#counting">How visitors are counted</a>), a random visit id and the seconds since the visitor's previous event.</li>
+  <li>Custom properties and revenue, if the website sends them.</li>
+</ul>
+<h3>What is not stored</h3>
+<ul>
+  <li>IP addresses (used only in memory for the hash, the location, IP exclusions and rate limits).</li>
+  <li>The full user agent, cookies, device fingerprints, full screen resolution or any id that lasts longer than a day.</li>
+  <li>Query strings, except the UTM / <code>ref</code> / <code>source</code> parameters.</li>
+</ul>
+<p>The daily salts are deleted after about two days (when the next day's salt is created, and by the <a href="#scheduling">retention job</a>), after which the ids can't be linked to anything. Raw events are deleted after the plan's retention period; daily summaries contain no visitor ids at all.</p>
+<h3>What your customers must take care of</h3>
+<ul>
+  <li><strong>No personal data in URLs, event names or properties.</strong> Page paths are stored as they are. A path like <code>/users/jane@example.com</code>, <code>/reset-password/&lt;token&gt;</code> or a property <code>email</code> would be stored too. Exclude such pages (<code>data-exclude</code> or <em>Pages to ignore</em>) and never send names or emails as properties.</li>
+  <li>Mentioning the analytics in their privacy policy, and honouring local rules (e.g. turning on <code>data-respect-dnt</code> where expected).</li>
+</ul>
+<h3>Your own platform</h3>
+<p>Your platform itself stores normal account data: names, emails, scrypt password hashes, payments, contact messages (with the sender's IP address), and for signed-in sessions the IP address and user agent. It sets a session cookie for signed-in users, a language cookie and, for unlocked password-protected shared dashboards, a 7-day access cookie. The cookie notice (Settings → Users) is for your own site. Customers can delete a website's statistics (<em>Reset data</em>) or the website itself at any time. Review the default Privacy policy page, add the GeoIP attribution if you use a GeoIP file, and add your company details.</p>
+
+<!-- ───────────────────────────── Performance ───────────────────────────── -->
+<h2 id="performance">Performance &amp; capacity</h2>
+<h3>How events are written</h3>
+<p>On a normal server, accepted events are kept in a memory queue and written to the database in multi-row inserts <strong>every 2 seconds or every 200 events</strong>, together with the monthly usage counters. The visitor's browser gets its <code>202</code> answer immediately. If the database is briefly unavailable, the queue keeps up to 50,000 events and retries every 5 seconds. Events still in the queue when the process is killed are lost, so stop the app gracefully (PM2, Docker and systemd do).</p>
+<p>On serverless hosts (Vercel, Netlify, AWS Lambda, or <code>PULSEZEN_SERVERLESS=1</code>) every request writes its own events before the function is frozen. This works, but costs one database write per event.</p>
+<h3>Rough capacity guide</h3>
+<p>These are estimates for a well-configured server; real numbers depend on the database, disk and how many customers look at their dashboards. “Events” means pageviews plus custom events.</p>
+<table>
+  <tr><th>Hosting</th><th>Events per day (comfortable)</th><th>Notes</th></tr>
+  <tr><td>Shared hosting / cPanel + MySQL</td><td>up to ~50,000–100,000</td><td>CPU and process limits of the host decide. Passenger may restart the app.</td></tr>
+  <tr><td>Any host + SQLite</td><td>up to ~100,000</td><td>Single file, one writer. Queries run inside the web process and block it while they run, so long dashboards slow down collection. Fine for testing and small platforms.</td></tr>
+  <tr><td>VPS 1–2 vCPU, 2 GB RAM, MySQL on the same server</td><td>~0.5–1 million</td><td>Give MySQL <code>innodb_buffer_pool_size</code> of about 50 % of RAM.</td></tr>
+  <tr><td>VPS 4 vCPU, 8 GB RAM, SSD/NVMe, tuned MySQL</td><td>several million</td><td>Separate the database server at this size.</td></tr>
+  <tr><td>Vercel + cloud MySQL</td><td>depends on your plan's limits</td><td>Watch function invocations and the database's request units.</td></tr>
+</table>
+<p><strong>Disk:</strong> plan roughly 0.5–1 KB per raw event including indexes (1 million events ≈ 0.5–1 GB). Retention keeps this bounded: a Free customer with 10,000 pageviews a month never holds more than about one month of raw events. Daily summaries are small (one row per website, day, dimension and value).</p>
+<p><strong>Indexes:</strong> the <code>events</code> table has indexes on <code>(site_id, ts)</code>, <code>(site_id, name, ts)</code>, <code>(site_id, session_hash, ts)</code> and <code>(site_id, visit_id)</code>; <code>rollup_daily</code> has the primary key <code>(site_id, day, dimension, value)</code>. They are created by the installer; don't remove them.</p>
+<p><strong>Query speed:</strong> dashboards of big websites over long ranges are the most expensive part (counting distinct visitors over millions of rows). Unfiltered ranges of three months or more read daily summaries, which keeps them fast; filtered long ranges read raw events. If dashboards get slow, add RAM for MySQL, lower the plans' retention, or move the database to its own server.</p>
+<p><strong>One process:</strong> keep one app process (<code>instances: 1</code>). The event queue, visit tracking, rate limits and caches are per process. With several processes or servers, numbers stay correct (visits are looked up in the database as a fallback), but rate limits apply per process and the realtime counter may miss events still queued in another process.</p>
+<p>Rate limits use the connecting IP address from <code>X-Forwarded-For</code>. Set <a href="#env"><code>TRUSTED_PROXY_HOPS</code></a> correctly when you use Cloudflare in front of Nginx.</p>
+
+<!-- ───────────────────────────── Customise ───────────────────────────── -->
+<h2 id="customize">Customisation</h2>
+<h3>Branding without code</h3>
+<p>Logo, favicon, colours, texts, plans, pages, blog, branding on shared dashboards and reports, and all interface texts (through Admin → Languages → English) are editable in the admin panel.</p>
+<h3>Code structure</h3>
+<table>
+  <tr><th>Path</th><th>Contents</th></tr>
+  <tr><td><code>src/analytics/types.ts</code></td><td>The contract: the tracker payload (<code>TrackPayload</code>), metrics, dimensions, channels, periods, filters, site settings, alert channel configs and the alert payload. Dependency-free.</td></tr>
+  <tr><td><code>src/analytics/normalize.ts</code></td><td>Validation: domains, site settings, filters from URLs, event names, alert channel configs.</td></tr>
+  <tr><td><code>src/tracker/</code></td><td>Source of <code>pz.js</code> (<code>index.ts</code>) and its <code>README.md</code>; bundled by <code>scripts/build-widget.mjs</code> with a 2 KB gzip budget.</td></tr>
+  <tr><td><code>src/app/api/event</code></td><td>The event endpoint (calls <code>handleEvent</code>).</td></tr>
+  <tr><td><code>src/lib/ingest.ts</code></td><td>Event collection: validation, bot filter, hostname check, exclusions, quota, enrichment, visit resolution and the write queue.</td></tr>
+  <tr><td><code>src/lib/sources.ts</code></td><td>Referrer and UTM → source and channel rules.</td></tr>
+  <tr><td><code>src/lib/salts.ts</code>, <code>geoip.ts</code>, <code>useragent.ts</code></td><td>Daily salt and visitor hash; location; browser/OS/device.</td></tr>
+  <tr><td><code>src/lib/query.ts</code></td><td>The stats engine: aggregate, timeseries, breakdowns, goals; raw vs. summarised days.</td></tr>
+  <tr><td><code>src/lib/rollups.ts</code></td><td>Building daily summaries.</td></tr>
+  <tr><td><code>src/lib/jobs/</code></td><td>Background jobs: <code>rollups</code>, <code>retention</code>, <code>traffic-alerts</code>, <code>reports</code>, <code>usage</code>; registered in <code>index.ts</code>.</td></tr>
+  <tr><td><code>src/lib/scheduler.ts</code>, <code>lazy-tick.ts</code></td><td>Ticks, lock, cron secret; lazy mode.</td></tr>
+  <tr><td><code>src/lib/alerts/</code></td><td>One file per channel, <code>format.ts</code> (alert texts), <code>index.ts</code> (sending and logging).</td></tr>
+  <tr><td><code>src/lib/reports.ts</code></td><td>Email report periods, data and HTML.</td></tr>
+  <tr><td><code>src/lib/api-keys.ts</code>, <code>stats-api.ts</code>, <code>src/app/api/v1</code></td><td>Stats API.</td></tr>
+  <tr><td><code>src/app/(dashboard)</code>, <code>src/components/dashboard</code></td><td>The customer dashboard; <code>stats-tabs.ts</code> defines the cards and tabs.</td></tr>
+  <tr><td><code>src/app/share/[token]</code></td><td>Shared dashboards, embed, data and CSV routes.</td></tr>
+  <tr><td><code>src/app/(site)</code>, <code>src/app/admin</code></td><td>Public site and admin panel.</td></tr>
+  <tr><td><code>src/lib/db/migrations.ts</code></td><td>Database schema, indexes and default plans (migrations run automatically).</td></tr>
+  <tr><td><code>src/lib/i18n/messages.ts</code></td><td>Every interface text in English (the source for translations).</td></tr>
+</table>
+<h3>Adding a source rule</h3>
+<p>Add an entry to <code>RULES</code> in <code>src/lib/sources.ts</code>:</p>
+<pre><code>{ name: "Le Chat", channel: "ai", host: /^chat\.example-ai\.com$/, aliases: ["lechat"] },</code></pre>
+<p><code>host</code> is matched against the referrer's hostname (lower case, without <code>www.</code>); <code>path</code> is an optional regex for the referrer path; <code>aliases</code> are <code>utm_source</code> values. The first matching rule wins, so put specific rules (e.g. an AI assistant on a search engine's domain) before general ones. Rules apply to new events; old events keep their source.</p>
+<h3>Adding a dimension</h3>
+<ol class="steps">
+  <li>Add a new migration in <code>src/lib/db/migrations.ts</code> (a new key such as <code>"2026_11_01_000001_events_os_version"</code>) that adds the column to <code>events</code>, and the column to <code>EventsTable</code> in <code>src/lib/db/schema.ts</code>.</li>
+  <li>Add the name to <code>DIMENSIONS</code> in <code>src/analytics/types.ts</code>.</li>
+  <li>Fill the column in the event row in <code>handleEvent()</code> (<code>src/lib/ingest.ts</code>).</li>
+  <li>Map it to the column in <code>COLUMN</code> in <code>src/lib/query.ts</code> (and add it to <code>EVENT_LEVEL</code> if it describes single events rather than visits).</li>
+  <li>Add it to <code>VISIT_COLUMNS</code> (or the event dimensions) and the <code>Row</code> type in <code>src/lib/rollups.ts</code>, so old days keep it.</li>
+  <li>Add a tab in <code>src/components/dashboard/stats-tabs.ts</code> and the texts <code>dash.dim.*</code> / <code>dash.tab.*</code> in <code>messages.ts</code>.</li>
+</ol>
+<h3>Adding an alert channel</h3>
+<ol class="steps">
+  <li><code>src/analytics/types.ts</code> – add to <code>CHANNEL_TYPES</code> and <code>ChannelConfigByType</code>.</li>
+  <li><code>src/analytics/normalize.ts</code> – a <code>case</code> in <code>normalizeChannelConfig</code> and a rule in <code>channelProblem</code>.</li>
+  <li><code>src/lib/alerts/yourchannel.ts</code> – build the message with <code>describeAlert()</code> from <code>format.ts</code> and send it with <code>deliver()</code> from <code>webhook.ts</code> (it applies the private-address rules and the timeout). Add a <code>case</code> in <code>sendAlert()</code> in <code>src/lib/alerts/index.ts</code>.</li>
+  <li>Dashboard – the fields and set-up steps in <code>src/components/dashboard/channel-forms.tsx</code>, and the texts <code>dash.channels.*</code> in <code>messages.ts</code>.</li>
+</ol>
+<p>While working on the tracker, <code>npm run widget:build</code> rebuilds only <code>public/pz.js</code> and prints its size; the build fails above 2 KB gzipped. After editing any code always run <code>npm run typecheck</code>, <code>npm run build</code> and restart the app <em>and</em> the worker.</p>
+
+<!-- ───────────────────────────── Demo ───────────────────────────── -->
+<h2 id="demo">Demo mode</h2>
+<p>Set <code>DEMO_MODE=true</code> to make the admin panel <strong>and</strong> the customer dashboard read-only: everything can be viewed, nothing can be saved, and registration is closed. <em>Send test</em> on alert channels and <em>Run jobs now</em> still work, and the cron URL is hidden in Admin → System. With <code>ADMIN_EMAIL</code> and <code>ADMIN_PASSWORD</code> set, the sign-in page pre-fills that account for visitors, and its password and profile can't be changed. Event collection keeps working.</p>
+<p>Add <code>DEMO_SEED=true</code> to fill an empty database once with sample data:</p>
+<ul>
+  <li>45 sample customers (a third of them on paid plans, one banned), payments including bank transfers waiting for approval, and contact messages.</li>
+  <li>For the first administrator: three sample websites with 12 months of history with growth and seasons (the last 14 days as raw events, older days as daily summaries, so the 12-month view and long ranges look real), goals, a weekly email report, traffic alerts with alert channels, and a public shared dashboard that is set as <em>Shared dashboard on your home page</em>. Sample customers get a small website each with 30 days of history and a few visits today.</li>
+  <li>The bundled <a href="#i18n-packs">Arabic and Hindi language packs</a>, installed and active, so visitors can try the language switcher and the right-to-left layout.</li>
+</ul>
+<div class="note">Set <code>ADMIN_EMAIL</code>/<code>ADMIN_PASSWORD</code> together with <code>DEMO_SEED</code>: the sample websites are created for the first administrator, and seeding runs only once per database. Administrators' websites are never pruned by retention, so the sample history stays. Keep the <a href="#scheduling">scheduler</a> running so new days are summarised.</div>
+
+<!-- ───────────────────────────── Update ───────────────────────────── -->
+<h2 id="update">Updating to a new version</h2>
+<ol class="steps">
+  <li>Back up the <code>storage</code> folder and your database.</li>
+  <li>Replace all files <em>except</em> <code>storage</code> (and your <code>.env</code> file and your edited <code>ecosystem.config.cjs</code>, if any) with the new version.</li>
+  <li>Run <code>npm install</code> and <code>npm run build</code> (this also rebuilds <code>pz.js</code>).</li>
+  <li>Restart the app <strong>and the worker</strong>: <code>pm2 restart all</code>, <code>docker compose up -d --build</code>, or <em>Restart</em> in cPanel.</li>
+</ol>
+<p>Database changes are applied automatically the first time the new version starts. Websites, statistics, site keys, share links and API keys are kept; customers don't need to change their snippets. During the restart (usually a few seconds) the event endpoint is unavailable and those events are lost; events already queued are written before a graceful stop.</p>
+
+<!-- ───────────────────────────── Env ───────────────────────────── -->
+<h2 id="env">Environment variables (optional)</h2>
+<p>Not needed for a normal installation. Use them for Docker, Vercel, the worker or read-only hosting; see <code>.env.example</code>. Copy it to <code>.env.local</code> or set the variables in your hosting panel. Variables set by the hosting panel or PM2 win over <code>.env</code> files.</p>
+<table>
+  <tr><th>Variable</th><th>Purpose</th></tr>
+  <tr><td><code>PORT</code></td><td>Port to listen on (default 3000). <code>HOST</code> sets the address for <code>server.js</code> (default <code>0.0.0.0</code>).</td></tr>
+  <tr><td><code>SITE_URL</code></td><td>Public address of the platform, used when “Site URL” is empty in the admin panel. On Vercel, the production domain is used as a last fallback.</td></tr>
+  <tr><td><code>CRON_SECRET</code></td><td>Secret for the cron URL and the worker. Without it, a random secret is stored in the database and shown in Admin → System. Vercel Cron sends it automatically. <strong>Required with <code>ecosystem.config.cjs</code> and <code>docker-compose.yml</code></strong> (the worker needs it). Use at least 12 random characters, e.g. <code>openssl rand -hex 24</code>; short values and the example value are ignored.</td></tr>
+  <tr><td class="wrap"><code>WORKER_URL</code>, <code>WORKER_INTERVAL_SEC</code></td><td>Worker only: address of the app (default <code>SITE_URL</code>, else <code>http://localhost:$PORT</code>) and seconds between ticks (default 15, minimum 5).</td></tr>
+  <tr><td><code>STORAGE_DIR</code></td><td>Folder for config, SQLite database and uploads.</td></tr>
+  <tr><td class="wrap"><code>DB_DRIVER</code>, <code>DB_HOST</code>, <code>DB_PORT</code>, <code>DB_NAME</code>, <code>DB_USER</code>, <code>DB_PASSWORD</code>, <code>DB_FILE</code></td><td>Database connection (overrides <code>storage/config.json</code>). <code>DB_DRIVER</code> is <code>mysql</code> or <code>sqlite</code>.</td></tr>
+  <tr><td><code>DATABASE_URL</code></td><td>Alternative to the <code>DB_*</code> variables: <code>mysql://user:password@host:3306/pulsezen?ssl=true</code>.</td></tr>
+  <tr><td><code>DB_SSL=true</code></td><td>Connect with TLS (required by most cloud databases).</td></tr>
+  <tr><td><code>APP_INSTALLED=true</code></td><td>Skip the installer when the database is configured with environment variables.</td></tr>
+  <tr><td class="wrap"><code>ADMIN_EMAIL</code>, <code>ADMIN_PASSWORD</code>, <code>ADMIN_NAME</code></td><td>Create or promote an administrator on start-up (no installer needed). The password needs at least 8 characters.</td></tr>
+  <tr><td><code>TRUSTED_PROXY_HOPS</code></td><td>Number of reverse proxies in front of the app that add <code>X-Forwarded-For</code> (default 1: Nginx, Apache/Passenger on cPanel, Vercel). Use <strong>2</strong> for Cloudflare in front of Nginx, so rate limits see the real connecting IP.</td></tr>
+  <tr><td><code>EVENT_RATE_LIMIT_PER_MIN</code></td><td>Events per minute per visitor IP and website (default 120).</td></tr>
+  <tr><td><code>EVENT_PROXY_RATE_LIMIT_PER_MIN</code></td><td>Events per minute per connecting IP and website when events arrive through a first-party proxy (default 600; the per-visitor limit applies too). Raise it for proxies that send more than about 10 events per second.</td></tr>
+  <tr><td><code>PULSEZEN_SERVERLESS=1</code></td><td>Write events right after each request instead of in 2-second batches. Automatic on Vercel, Netlify and AWS Lambda.</td></tr>
+  <tr><td><code>ALLOW_PRIVATE_WEBHOOKS=1</code></td><td>Let webhook alert channels post to private/internal addresses. Only for single-company installations.</td></tr>
+  <tr><td><code>DEMO_MODE=true</code></td><td>Read-only admin panel and dashboard.</td></tr>
+  <tr><td><code>DEMO_SEED=true</code></td><td>Fill an empty database with sample data (see <a href="#demo">Demo mode</a>).</td></tr>
+  <tr><td><code>NEXT_SERVER_ACTIONS_ENCRYPTION_KEY</code></td><td>Optional. Keeps form actions working across several servers or rebuilds.</td></tr>
+  <tr><td><code>NEXT_DIST_DIR</code></td><td>Development only: build folder (default <code>.next</code>), to run a second dev server from the same folder.</td></tr>
+</table>
+
+<!-- ───────────────────────────── Troubleshooting ───────────────────────────── -->
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3>No data in the dashboard</h3>
+<p>Open the website in a normal browser window (ad blocker off), press <kbd>F12</kbd> and look at the <em>Network</em> and <em>Console</em> tabs. Filter by <code>pz.js</code> and <code>event</code>.</p>
+<table>
+  <tr><th>What you see</th><th>Cause and solution</th></tr>
+  <tr><td>No request for <code>pz.js</code> at all</td><td>The snippet is not on the page (check the page source), the page is served from a cache that hasn't been cleared, or an optimisation plugin removed or delayed it. Clear caches; exclude <code>pz.js</code> from “delay JS” and combine features.</td></tr>
+  <tr><td><code>pz.js</code> returns 404</td><td>The platform hasn't been built with this version: run <code>npm run build</code> and restart. If you build on another computer, upload <code>public/pz.js</code> together with <code>.next</code>.</td></tr>
+  <tr><td><code>pz.js</code> or the event request is “blocked” (<code>ERR_BLOCKED_BY_CLIENT</code>)</td><td>An ad blocker or privacy extension. Test without it, or set up a <a href="#proxy">first-party proxy</a>.</td></tr>
+  <tr><td>Console: “Refused to load the script … Content Security Policy” or “Refused to connect”</td><td>Add your platform to <code>script-src</code> and <code>connect-src</code> (see <a href="#t-csp">CSP</a>).</td></tr>
+  <tr><td>Event request answers <code>403</code> “This hostname is not allowed…”</td><td>The page's domain doesn't match the website's domain. Check the domain in Site settings (without <code>www</code>); add staging or second domains under <em>Other domains that may send data</em>.</td></tr>
+  <tr><td><code>404</code> “Unknown site.”</td><td>The <code>data-site</code> key is wrong, or the website was deleted. Copy the snippet again.</td></tr>
+  <tr><td><code>202</code> but nothing appears</td><td>The visit was ignored on purpose: your IP is in <em>IP addresses to ignore</em>, the path is excluded, the browser's user agent matches a bot pattern, or the account is over its monthly limit (+10 %) or banned. Also check that the period and filters in the dashboard include today.</td></tr>
+  <tr><td>Nothing on <code>localhost</code></td><td>Local pages are ignored unless the snippet has <code>data-allow-localhost</code> <em>and</em> the website has <em>Count visits from localhost</em> on (or its domain is <code>localhost</code>).</td></tr>
+  <tr><td>Mixed content error</td><td>The website is HTTPS but the snippet uses <code>http://</code>. Install HTTPS on the platform and set the Site URL to <code>https://</code>.</td></tr>
+  <tr><td><code>429</code> Too many events</td><td>Normal visitors never reach 120 events per minute. Through a proxy without <code>X-Forwarded-For</code> all visitors share one IP: fix the proxy. A busy website behind a proxy can reach the proxy limit of 600 events per minute: raise <code>EVENT_PROXY_RATE_LIMIT_PER_MIN</code>.</td></tr>
+</table>
+
+<h3>Numbers look wrong</h3>
+<table>
+  <tr><th>Problem</th><th>Explanation</th></tr>
+  <tr><td>Different from Google Analytics</td><td>Normal; see <a href="#counting">How visitors are counted</a>. Compare trends.</td></tr>
+  <tr><td>Every visit is from the same city / counts as one visitor</td><td>The platform doesn't receive the visitor IP. Behind Nginx, set <code>X-Forwarded-For</code>; with a first-party proxy, forward the visitor IP (see <a href="#proxy">First-party proxy</a>).</td></tr>
+  <tr><td>Countries are all “Unknown”</td><td>No location source: add a <a href="#geoip">GeoIP file</a> (and restart), or run behind Cloudflare / on Vercel. Only new events get a location.</td></tr>
+  <tr><td>No countries for a website behind a proxy</td><td>For proxied events Pulsezen ignores the Vercel / Cloudflare location headers (they describe the proxy) and needs a <a href="#geoip">GeoIP file</a> to look up the forwarded visitor IP; see the note in <a href="#proxy">First-party proxy</a>.</td></tr>
+  <tr><td>Notice “Some days in this range only have daily summaries…”</td><td>Combined filters on days older than the plan's retention; see <a href="#retention">Data retention</a>.</td></tr>
+  <tr><td>Visits are counted twice in a single-page app</td><td>The snippet is included twice (e.g. in the layout and in a page). Keep one.</td></tr>
+  <tr><td>Revenue looks too low</td><td>Only revenue in the platform currency (or without a currency) is counted; amounts in other currencies are not added. Check the event's <code>$currency</code> property in the dashboard and send the platform currency.</td></tr>
+</table>
+
+<h3>Background jobs don't run</h3>
+<p>Open <strong>Admin → System → Scheduler</strong> first.</p>
+<table>
+  <tr><th>What you see</th><th>Solution</th></tr>
+  <tr><td><em>Never ran</em> or <em>Stalled</em></td><td>Nothing is starting ticks. Lazy mode only runs while people use your platform's pages or events arrive. Add the <a href="#sched-cron">cron URL</a> or start the <a href="#sched-worker">worker</a>. Click <em>Run jobs now</em> to test that the jobs themselves work.</td></tr>
+  <tr><td>Cron job runs but the scheduler stays stalled</td><td>Open the cron URL in a browser. <code>401</code> = wrong secret (copy the URL again; after <em>New secret</em> the old URL stops working). <code>503</code> “Application is not installed” = wrong domain or the installer hasn't run. <code>429</code> = called too often from one IP. A redirect to <code>/login</code> or a hosting page means the URL is wrong. Remove <code>&gt;/dev/null 2&gt;&amp;1</code> temporarily and read the cron email.</td></tr>
+  <tr><td>Worker log shows <code>401</code></td><td>The worker's <code>CRON_SECRET</code> doesn't match the app's, or it is shorter than 12 characters / the example value (the app then ignores it and uses the stored secret). With PM2 both get the value from <code>ecosystem.config.cjs</code>; restart with <code>--update-env</code> after changing it.</td></tr>
+  <tr><td>Worker log shows “can't reach …”</td><td>The app isn't running, or <code>WORKER_URL</code>/<code>PORT</code> is wrong. With <code>SITE_URL</code> in a <code>.env</code> file the worker calls the public address; set <code>WORKER_URL=http://localhost:3000</code> to stay local.</td></tr>
+  <tr><td>A job shows “failed”</td><td>Read the app's log (<code>pm2 logs pulsezen</code>, <code>docker compose logs app</code>, or the cPanel <code>stderr.log</code>) for <code>[pulsezen] job "…" failed</code>.</td></tr>
+  <tr><td>Yesterday is missing from the admin chart / reports wait</td><td>Days are summarised a few minutes after midnight in each website's time zone, by the <code>rollups</code> job. Make sure ticks run.</td></tr>
+  <tr><td>The database keeps growing</td><td>The <code>retention</code> job deletes old raw events only after their day is summarised, at most 5,000 per website per tick. Check that ticks run; a large backlog clears over several hours.</td></tr>
+</table>
+
+<h3>Alerts and email</h3>
+<table>
+  <tr><th>Problem</th><th>Solution</th></tr>
+  <tr><td><strong>Emails don't arrive</strong> (reports, alerts, password reset)</td><td>Configure SMTP, switch on <em>Send emails</em> and use Admin → System → Email test. Check the spam folder and set up SPF/DKIM for the sender domain. The alert history shows the exact SMTP error for alert emails; report errors are in the app log.</td></tr>
+  <tr><td>Reports are not sent</td><td>SMTP and the scheduler are both needed. Weekly reports go out on Monday, monthly reports on the 1st, in the website's time zone. Use <em>Send a test report now</em> to check delivery.</td></tr>
+  <tr><td>A traffic alert never fires</td><td>Spike needs 24 hours of history and at least 20 visitors in the last hour; drop needs 7 summarised days and at least 10 visitors a day; “no data” never fires for a website that never received data. After an alert, it is quiet for 6 hours. Check that the alert has a channel and is not paused.</td></tr>
+  <tr><td>Telegram test fails</td><td>“Telegram rejected the bot token” = wrong token. “Check the chat ID” = wrong chat ID (groups are negative, supergroups and channels start with <code>-100</code>). “The bot can't write to this chat” = press <em>Start</em> in the bot chat, add the bot to the group, or make it an admin of the channel.</td></tr>
+  <tr><td>Slack test fails with 403/404</td><td>The webhook was revoked or the app removed from the channel. Create a new incoming webhook.</td></tr>
+  <tr><td>Discord test fails</td><td>401/404: the webhook was deleted; copy a new URL. 400: Discord refuses webhook names containing “discord”; alerts are posted under your site name, so rename your platform if it contains that word.</td></tr>
+  <tr><td>Teams test fails</td><td>Old Office 365 connector URLs stop working as Microsoft retires them. Create a Workflow with “Post to a channel when a webhook request is received”.</td></tr>
+  <tr><td>Webhook: private addresses refused</td><td>The URL points at a local network. Use a public address, or set <code>ALLOW_PRIVATE_WEBHOOKS=1</code> on a single-company install.</td></tr>
+  <tr><td>Webhook: “The endpoint answered HTTP 301/302”</td><td>Redirects are not followed. Use the final <code>https://</code> address.</td></tr>
+  <tr><td>Signature doesn't match</td><td>Compute the HMAC over the <em>raw</em> body before parsing it, with the channel's current secret, and compare with the whole header including <code>sha256=</code>.</td></tr>
+  <tr><td>Links in alerts, reports or the snippet point to <code>localhost:3000</code></td><td>Set the Site URL in Settings → General.</td></tr>
+</table>
+
+<h3>Installation and server</h3>
+<table>
+  <tr><th>Problem</th><th>Solution</th></tr>
+  <tr><td>Blank page or “502 Bad Gateway”</td><td>The app isn't running. Check that <code>npm run build</code> finished, then restart (cPanel: <em>Restart</em>; VPS: <code>pm2 restart pulsezen</code>; logs: <code>pm2 logs pulsezen</code>).</td></tr>
+  <tr><td>Build fails with “[tracker] build failed” or “exceeds the 2048 B budget”</td><td>Dev dependencies (esbuild, Tailwind, TypeScript) are missing: run <code>npm install</code> (not <code>--omit=dev</code>) before building. The budget message only appears if you changed the tracker and it grew above 2 KB gzipped.</td></tr>
+  <tr><td>“storage folder is writable” fails</td><td>Give the app user write access: <code>chmod -R 775 storage</code> (and <code>chown</code> it to the user running Node.js).</td></tr>
+  <tr><td>Database connection fails</td><td>Check host (usually <code>localhost</code> or <code>127.0.0.1</code>), port 3306, and that the user has all privileges on the database. On cPanel the database and username include your account prefix, e.g. <code>myacc_pulsezen</code>.</td></tr>
+  <tr><td>SQLite option fails</td><td>SQLite needs Node.js 22.13+. Choose a newer Node.js version in your hosting panel or use MySQL.</td></tr>
+  <tr><td>Docker build fails on a copy with <code>node_modules</code></td><td>Build from a clean copy of the <code>app</code> folder (a <code>node_modules</code> folder from Windows or macOS doesn't work in the Linux image).</td></tr>
+  <tr><td>Can't sign in after installing on HTTPS behind a proxy</td><td>Make sure the proxy sends <code>X-Forwarded-Proto</code> and <code>Host</code> headers (see the Nginx example).</td></tr>
+  <tr><td>Users get “Too many requests” on sign-in</td><td>Behind Cloudflare + Nginx set <code>TRUSTED_PROXY_HOPS=2</code>, so each visitor has their own limit.</td></tr>
+  <tr><td>GeoIP file not loaded</td><td>The log says <code>[pulsezen] GeoIP database not loaded (…)</code>. Use the full path, a file ending in <code>.mmdb</code>, readable by the app user. Restart after replacing the file.</td></tr>
+  <tr><td>Payments are not activated</td><td>For Stripe, check the webhook URL and signing secret, and look at the webhook delivery log in Stripe. Set the correct Site URL.</td></tr>
+  <tr><td>I forgot the admin password</td><td>Use “Forgot password” (needs SMTP). Otherwise ask another administrator to set a new password in Admin → Users, or delete <code>storage/installed.lock</code>, restart, and run the installer again with the same database and the same admin email: the installer sets the new password on the existing account and keeps all data.</td></tr>
+</table>
+
+<!-- ───────────────────────────── Credits ───────────────────────────── -->
+<h2 id="credits">Credits</h2>
+<p>Pulsezen uses these open-source projects. Their licences allow commercial use. Pulsezen itself is released under the MIT licence.</p>
+<table>
+  <tr><th>Project</th><th>Licence</th></tr>
+  <tr><td>Next.js, React, React DOM</td><td>MIT</td></tr>
+  <tr><td>Tailwind CSS, @tailwindcss/turbopack</td><td>MIT</td></tr>
+  <tr><td>Kysely, mysql2, zod, marked, undici, stripe-node, server-only</td><td>MIT</td></tr>
+  <tr><td>mmdb-lib (reads GeoIP <code>.mmdb</code> files)</td><td>MIT</td></tr>
+  <tr><td>ua-parser-js <strong>version 1</strong> (browser, OS and device detection)</td><td>MIT. <strong>Do not upgrade to version 2</strong>: it is licensed under AGPL-3.0, which is not compatible with selling closed SaaS copies. <code>package.json</code> pins <code>^1.0.41</code>.</td></tr>
+  <tr><td>isbot (bot detection)</td><td>The Unlicense (public domain)</td></tr>
+  <tr><td>Nodemailer</td><td>MIT-0</td></tr>
+  <tr><td>Lucide icons (lucide-react)</td><td>ISC</td></tr>
+  <tr><td>esbuild (builds the tracking script; not included in it)</td><td>MIT</td></tr>
+  <tr><td>TypeScript, ESLint, eslint-config-next (development only)</td><td>Apache 2.0, MIT, MIT</td></tr>
+  <tr><td>Bricolage Grotesque, Instrument Sans, JetBrains Mono fonts</td><td>SIL Open Font License 1.1 (licence files in <code>src/fonts</code>)</td></tr>
+</table>
+<p>The tracking script <code>pz.js</code> contains only Pulsezen's own code. <strong>GeoIP databases are not bundled.</strong> If you use MaxMind GeoLite2 (GeoLite2 EULA) or DB-IP Lite (CC BY 4.0), follow their licence terms, including the attribution described in <a href="#geoip">GeoIP</a>.</p>
+
+<!-- ───────────────────────────── Changelog ───────────────────────────── -->
+<h2 id="changelog">Changelog</h2>
+<div class="card"><strong>1.0.0</strong> – 17 October 2026 – Initial release.
+<ul>
+  <li>Cookieless tracking script <code>pz.js</code> (about 1.5 KB gzipped): pageviews, single-page apps, hash routing, outbound links, file downloads, 404 pages, custom events with properties and revenue, class-based events, Do Not Track option, path exclusions.</li>
+  <li>Event collection with bot filtering, hostname checks, IP and path exclusions, plan quotas, rate limits and batched writes; daily-rotating salted visitor ids; no IP addresses stored.</li>
+  <li>Dashboard with visitors, visits, pageviews, views per visit, bounce rate, visit duration, realtime visitors, comparison, pages, sources, channels (incl. AI assistants), UTM, locations, devices, goals and events; filters, custom ranges, details and CSV export.</li>
+  <li>Locations from Vercel/Cloudflare headers or a MaxMind/DB-IP <code>.mmdb</code> file.</li>
+  <li>Daily summaries with plan-based data retention; background jobs with lazy mode, cron URL and a 15-second worker.</li>
+  <li>Weekly and monthly email reports; traffic alerts (spike, drop, no data) by email, signed webhook, Slack, Discord, Microsoft Teams and Telegram.</li>
+  <li>Shared dashboards with optional password and iframe embedding; Stats REST API with API keys.</li>
+  <li>Plans with website, pageview, retention and API limits and branding removal; Stripe, PayPal, Razorpay and bank transfer.</li>
+  <li>Admin panel, blog, content pages, multi-language with RTL, bundled Arabic and Hindi language packs, web installer for MySQL or SQLite, PM2 and Docker configurations, demo mode with 12 months of sample data.</li>
+</ul></div>
+
+<!-- ───────────────────────────── Support ───────────────────────────── -->
+<h2 id="support">Support</h2>
+<p>If something isn't working, please read <a href="#troubleshooting">Troubleshooting</a> first, and check Admin → System → Scheduler. For further help, open an issue on <a href="https://github.com/epifive/pulsezen/issues">GitHub</a>. Please include your hosting type, Node.js version, database (MySQL or SQLite), how you run background jobs (lazy, cron, worker), the website and page involved, the answer of the <code>/api/event</code> request from the browser's Network tab, and any error from the browser console or the server log. Bug reports and pull requests are welcome. For a hosted version, paid installation or custom work, contact <a href="https://www.epifive.com/services">EpiFive</a>.</p>
+</main>
+</div>
+</body>
+</html>

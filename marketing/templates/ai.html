@@ -1,0 +1,83 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+  @font-face { font-family: "Bricolage"; src: url("../../app/src/fonts/bricolage-grotesque.woff2") format("woff2"); font-weight: 200 800; }
+  @font-face { font-family: "Instrument"; src: url("../../app/src/fonts/instrument-sans.woff2") format("woff2"); font-weight: 400 700; }
+  @font-face { font-family: "JBMono"; src: url("../../app/src/fonts/jetbrains-mono.woff2") format("woff2"); font-weight: 400 800; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 1440px; height: 900px; overflow: hidden; }
+  body { font-family: "Instrument", sans-serif; color: #1c1917; position: relative;
+    background-color: #fdf8f4;
+    background-image:
+      radial-gradient(760px 520px at 84% 108%, rgba(124, 58, 237, .14), transparent 70%),
+      radial-gradient(620px 380px at 0% 0%, rgba(251, 191, 36, .2), transparent 70%),
+      radial-gradient(700px 420px at 100% 0%, rgba(194, 65, 12, .12), transparent 70%),
+      linear-gradient(rgba(194,65,12,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(194,65,12,.06) 1px, transparent 1px);
+    background-size: auto, auto, auto, 24px 24px, 24px 24px; }
+  .head { position: absolute; left: 80px; top: 84px; width: 580px; }
+  .eyebrow { font-size: 15px; font-weight: 600; color: #7c3aed; display: flex; align-items: center; gap: 8px; }
+  .eyebrow b { font-size: 11px; font-weight: 700; color: #fff; background: #7c3aed; border-radius: 5px; padding: 2px 6px; }
+  h1 { font-family: "Bricolage"; font-size: 50px; line-height: 1.03; letter-spacing: -.025em; margin: 12px 0 14px; font-weight: 800; }
+  h1 em { font-style: normal; color: #c2410c; }
+  .head p { margin: 0; font-size: 18.5px; line-height: 1.5; color: #57534e; }
+
+  .code { position: absolute; left: 80px; top: 404px; width: 590px; background: #1c1917; border-radius: 16px; box-shadow: 0 30px 60px -24px rgba(67, 20, 7, .55); overflow: hidden; }
+  .code .bar { display: flex; align-items: center; gap: 7px; padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,.08); }
+  .code .bar i { width: 10px; height: 10px; border-radius: 50%; background: #44403c; }
+  .code .bar span { margin-left: 8px; font-size: 13px; color: #a8a29e; font-family: "JBMono"; }
+  .code .bar em { margin-left: auto; font-style: normal; font-size: 12px; font-weight: 700; color: #431407; background: #fbbf24; border-radius: 6px; padding: 2px 8px; }
+  .code pre { margin: 0; padding: 16px 20px 18px; font-family: "JBMono"; font-size: 14.2px; line-height: 1.75; color: #e7e5e4; white-space: pre; font-variant-ligatures: none; }
+  .c { color: #78716c; } .t { color: #fb923c; } .a { color: #fcd34d; } .s { color: #86efac; } .f { color: #c4b5fd; }
+
+  .facts { position: absolute; left: 80px; top: 712px; width: 590px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .facts div { background: #fff; border: 1px solid #eadfd6; border-radius: 12px; padding: 12px 14px; }
+  .facts b { display: block; font-family: "Bricolage"; font-size: 24px; font-weight: 800; letter-spacing: -.02em; color: #c2410c; }
+  .facts span { font-size: 13.5px; color: #57534e; }
+
+  .card { position: absolute; left: 736px; top: 150px; width: 641px; height: 514px; border-radius: 16px; overflow: hidden; background: #fff; box-shadow: 0 40px 90px -30px rgba(67, 20, 7, .4), 0 0 0 1px rgba(28,25,23,.08); }
+  .card img { position: absolute; width: 1728px; left: -1028.4px; top: -30px; }
+  .pills { position: absolute; left: 24px; right: 24px; bottom: 74px; }
+  .pills .lbl { font-size: 13px; font-weight: 600; color: #78716c; margin-bottom: 8px; }
+  .pills div { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pills span { font-size: 13px; font-weight: 600; color: #5b21b6; background: #f5f3ff; border: 1px solid #ddd6fe; border-radius: 999px; padding: 3px 10px; }
+  .badge { position: absolute; left: 690px; top: 94px; background: #fff; border-radius: 14px; padding: 14px 18px 14px 14px; display: flex; gap: 12px; align-items: center; box-shadow: 0 24px 50px -20px rgba(67, 20, 7, .45), 0 0 0 1px rgba(28,25,23,.06); z-index: 2; }
+  .badge .ico { width: 42px; height: 42px; border-radius: 11px; background: linear-gradient(135deg, #8b5cf6, #6d28d9); display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 15px; }
+  .badge strong { display: block; font-family: "Bricolage"; font-size: 25px; letter-spacing: -.02em; line-height: 1; }
+  .badge small { font-size: 13px; color: #78716c; }
+  .note { position: absolute; left: 736px; top: 688px; width: 641px; font-size: 14.5px; line-height: 1.55; color: #57534e; }
+  .note b { color: #1c1917; }
+</style></head>
+<body>
+  <div class="head">
+    <div class="eyebrow"><b>AI</b>AI assistants channel</div>
+    <h1>See when <em>ChatGPT</em> sends you visitors</h1>
+    <p>More people ask an AI assistant instead of a search engine. Pulsezen recognises visits from ChatGPT, Perplexity, Gemini, Copilot, Claude and more, and gives them their own channel next to search, social and email.</p>
+  </div>
+
+  <div class="code">
+    <div class="bar"><i></i><i></i><i></i><span>&lt;head&gt; of every page</span><em>1 line</em></div>
+<pre><span class="c">&lt;!-- Pulsezen: cookieless, privacy-friendly analytics --&gt;</span>
+<span class="t">&lt;script</span> <span class="a">defer src</span>=<span class="s">"https://analytics.example.com/pz.js"</span>
+        <span class="a">data-site</span>=<span class="s">"RLCAuTDk2U74"</span><span class="t">&gt;&lt;/script&gt;</span>
+
+<span class="c">// Optional: goals, revenue and event properties</span>
+<span class="f">pulsezen</span>(<span class="s">"Purchase"</span>, { props: { product: <span class="s">"Linen Shirt"</span> },
+  revenue: { amount: <span class="a">89</span>, currency: <span class="s">"USD"</span> } });</pre>
+  </div>
+
+  <div class="facts">
+    <div><b>&lt; 2 KB</b><span>script, gzipped</span></div>
+    <div><b>0</b><span>cookies, no fingerprinting</span></div>
+    <div><b>SPA</b><span>single-page apps too</span></div>
+  </div>
+
+  <div class="badge"><div class="ico">AI</div><div><strong>356 visitors</strong><small>from AI assistants · last 30 days</small></div></div>
+  <div class="card">
+    <img src="../raw/d05-ai-assistants.png">
+    <div class="pills">
+      <div class="lbl">Recognised automatically</div>
+      <div><span>ChatGPT</span><span>Perplexity</span><span>Gemini</span><span>Copilot</span><span>Claude</span><span>DeepSeek</span><span>Grok</span><span>Mistral</span><span>Meta AI</span><span>Poe</span><span>You.com</span><span>Phind</span><span>Kimi</span></div>
+    </div>
+  </div>
+  <div class="note">See <b>which pages</b> AI assistants send people to, filter the whole dashboard by one assistant and get the AI count in every <b>email report</b>.</div>
+</body></html>
