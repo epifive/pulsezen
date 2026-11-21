@@ -1,5 +1,14 @@
 # Pulsezen
 
+<!-- epifive:header -->
+> Website analytics without cookies, fingerprinting or stored IP addresses: a Google Analytics alternative you host yourself.
+
+[![Licence: MIT](https://img.shields.io/badge/licence-MIT-0a7560?style=flat-square)](LICENSE)
+[![Latest release](https://img.shields.io/github/v/release/epifive/pulsezen?style=flat-square&label=release&color=4f5bd5)](https://github.com/epifive/pulsezen/releases/latest)
+[![GitHub stars](https://img.shields.io/github/stars/epifive/pulsezen?style=flat-square&color=b5791b)](https://github.com/epifive/pulsezen/stargazers)
+
+**[Docs & guide on epifive.com](https://www.epifive.com/blog/pulsezen-self-hosted-google-analytics-alternative?utm_source=github&utm_medium=readme&utm_campaign=pulsezen)** · **[Live demo](https://pulsezen-iota.vercel.app)** · **[Download the latest release](https://github.com/epifive/pulsezen/releases/latest)**
+
 **Open-source, privacy-friendly website analytics — a cookieless Google Analytics alternative you
 run as a self-hosted SaaS.** Built with Next.js 16, React 19 and Tailwind CSS 4. Runs on a VPS,
 Docker, cPanel (Node.js) or Vercel, with MySQL/MariaDB or a zero-setup SQLite database.
@@ -84,3 +93,7 @@ Bug reports and pull requests are welcome — please open an
 ## License
 
 [MIT](LICENSE) © 2026 EpiFive
+
+---
+
+<p align="center">Made by <b>EpiFive</b> — <a href="https://www.epifive.com/?utm_source=github&utm_medium=readme&utm_campaign=pulsezen">www.epifive.com</a> · <a href="https://www.epifive.com/open-source?utm_source=github&utm_medium=readme&utm_campaign=pulsezen">more open-source projects</a></p>
